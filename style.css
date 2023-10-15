@@ -4,7 +4,8 @@
 }
 
 body{
-    background-color: black;
+    background-color: #000000;
+    overflow: hidden;
 }
 
 #table2{
@@ -101,6 +102,7 @@ body{
     z-index: 0;
 }
 
+
 .new-particle-text {
     position: absolute;
     top: 30px;
@@ -112,9 +114,11 @@ body{
     width: 1050px;
     height: 600px;
     font-size: 20pt;
-    z-index: 2;
+    z-index: 3;
+    user-select: none;
 }
 .continue_button {
     background-color: blue;
     bottom: -100px;
+    user-select: none;
 }

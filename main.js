@@ -2,7 +2,7 @@ id_chosen = -1;
 
 
 document.getElementById('touchscreen1').onclick = function(){
-  f(id_chosen)
+  show_isotopes_around_element(id_chosen)
 }
 document.getElementById('touchscreen2').onclick = function(){
     continue_iso()
@@ -38,7 +38,7 @@ function highlight_table(id){
   }
 }
 
-function f(id) {
+function show_isotopes_around_element(id) {
 
   amount_isotopes = element_isotopes[id].length;
   r = 100;
@@ -68,6 +68,8 @@ function f(id) {
   }
   dim_table(id);
   id_chosen = id;
+
+
   anim = anime.timeline({
     duration: 300,
     easing: 'easeInOutExpo',  
@@ -82,42 +84,64 @@ function f(id) {
     angle_cur += angle;
   }
 }
+
+
 text = anime({
     targets: '.new-particle-text',
     translateX: 1550,
     autoplay: false,
     duration: 1000,
+    easing: 'easeInOutExpo',
   })    
 anim_iso = anime.timeline({
     autoplay: false,
     duration: 1000,
+    easing: 'easeInOutExpo',
 })
 
 function show_isotope(q, serial){
-  console.log(document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`))
   document.getElementById('touchscreen2').style.visibility = "visible";
-  document.getElementById('touchscreen2').style.zIndex = "1";
+  document.getElementById('touchscreen2').style.zIndex = "2";
+  document.getElementById('touchscreen2').style.pointerEvents = "none";
+  document.getElementById('touchscreen1').style.pointerEvents = "none";
+  document.getElementById('continue-new-particle').style.pointerEvents = "none";
   anim_iso = anime({
     targets:`#element-${serial}-${element_isotopes[serial][q]}`,
     scale: 5,
     left: "100px",
+    top: "100px",
     autoplay: false,
+    easing: 'easeInOutExpo',
   })
-  anim_iso.play();
+  anim_iso.play()
   text.direction = "normal"
+  text.finished.then(function (){
+    document.getElementById('touchscreen1').style.pointerEvents = "auto";
+    document.getElementById('touchscreen2').style.pointerEvents = "auto";
+    document.getElementById('continue-new-particle').style.pointerEvents = "auto";
+  });
   text.play(); 
-  
 
 }
 
 function continue_iso(){
-    anim_iso.direction = "reverse";
-    anim_iso.play();
-    text.direction = "reverse";
-    text.play();
-    document.getElementById('touchscreen2').style.visibility = "hidden";
-    document.getElementById('touchscreen2').style.zIndex = "0";
+  console.log("closing")
+  document.getElementById('touchscreen2').style.pointerEvents = "none";
+  document.getElementById('touchscreen1').style.pointerEvents = "none";
+  document.getElementById('continue-new-particle').style.pointerEvents = "none";
+  anim_iso.direction = "reverse";
+  anim_iso.play();
+  text.direction = "reverse";
+  text.play();
+  text.finished.then(function (){
+    document.getElementById('touchscreen1').style.pointerEvents = "auto";
+    document.getElementById('touchscreen2').style.pointerEvents = "auto";
+  });
+  document.getElementById('touchscreen2').style.visibility = "hidden";
+  document.getElementById('touchscreen2').style.zIndex = "0";
 }
+
+
 
 for (var i = 0; i < 9; ++i) {
   if (i < 7) ind = 1;
@@ -150,7 +174,7 @@ for (var i = 0; i < 9; ++i) {
       `
     }
     document.getElementById(`element-${serial}`).innerHTML += `
-      <div class="table-element-main" onclick=f("${serial}")>
+      <div class="table-element-main" onclick=show_isotopes_around_element("${serial}")>
         <div class='table-element-left-space'>
           <p class='table-element-serial'>${serial}</p>
           <p class='table-element-name'>${element_names[serial][0]}</p>
