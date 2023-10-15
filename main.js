@@ -1,5 +1,3 @@
-
-
 id_chosen = -1;
 
 
@@ -50,7 +48,6 @@ function f(id) {
       easing: 'easeInOutExpo',
     })
     for (var i = 0; i < element_isotopes[id_chosen].length; ++i){
-    
       document.getElementById(`element-${id_chosen}-${element_isotopes[id_chosen][i]}`).style.zIndex = 0;
       anim1.add({
         targets: `#element-${id_chosen}-${element_isotopes[id_chosen][i]}`,
@@ -82,33 +79,36 @@ function f(id) {
     angle_cur += angle;
   }
 }
-show_is = anime({
-  targets: '.new-particle-text',
-  translateX: 1550,
-  duration: 1200,
-  autoplay: false,
-})
-ani = anime.timeline({
-    duration: 1000,
+text = anime({
+    targets: '.new-particle-text',
+    translateX: 1550,
     autoplay: false,
+    duration: 1000,
+  })    
+anim_iso = anime.timeline({
+    autoplay: false,
+    duration: 1000,
 })
+
 function show_isotope(q, serial){
-  show_is.play(); 
-  console.log(`element-${serial}-${element_isotopes[serial][q]}`)
-  document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.position="absolute";
-  ani.add({
-    targets: `#element-${serial}-${element_isotopes[serial][q]}`,
-    left: '100px',
-    scale: 6,
+  console.log(document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`))
+
+  anim_iso = anime({
+    targets:`#element-${serial}-${element_isotopes[serial][q]}`,
+    scale: 5,
+    left: "100px",
+    autoplay: false,
   })
-  ani.play()
+  anim_iso.play();
+  text.direction = "normal"
+  text.play(); 
 }
+
 function continue_iso(){
-  console.log("SFF")
-  show_is.direction = "reverse";
-  ani.direction = "reverse";
-  ani.play()
-  show_is.play();
+    anim_iso.direction = "reverse";
+    anim_iso.play();
+    text.direction = "reverse";
+    text.play();
 }
 
 for (var i = 0; i < 9; ++i) {
