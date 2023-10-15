@@ -20,7 +20,7 @@ function dim_table(id){
   for (var i = 1; i <= 118; ++i){
     if (i != id){
       element = document.getElementById(`element-${i}`)
-      element.style.opacity = "0.5";
+      element.style.opacity = "0.2";
       
     }
   }
@@ -40,7 +40,7 @@ function highlight_table(id){
 function f(id) {
   console.log(1)
   amount_isotopes = element_isotopes[id].length;
-  r = 70;
+  r = 100;
   angle = 2 * Math.PI / amount_isotopes;
   angle_cur = 0;
 
@@ -97,9 +97,10 @@ for (var i = 0; i < 9; ++i) {
     else visibility = ''
 
     if (serial != 0) intext = element_names[serial][0];
-    else intext = 'hui'
+    else intext = ''
     document.getElementById(`table-row-${i}`).innerHTML += `
-      <div class='table-element${visibility}'  style="user-select: none"; id="element-${serial}">
+      <div class='table-element${visibility}' id="element-${serial}">
+        
       </div>
     `
     if (visibility == '-empty') continue; 
@@ -115,7 +116,12 @@ for (var i = 0; i < 9; ++i) {
     }
     document.getElementById(`element-${serial}`).innerHTML += `
       <div class="table-element-main" onclick=f("${serial}")>
-      ${element_names[serial][0]}
+        <div class='table-element-left-space'>
+          <p class='table-element-serial'>${serial}</p>
+          <p class='table-element-name'>${element_names[serial][0]}</p>
+          <p class='table-element-name-full'>${element_names[serial][1]}</p>
+        </div>
+        <div class='table-element-dividing-line'></div>
       </div>
     `
   }

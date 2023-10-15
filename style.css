@@ -1,3 +1,12 @@
+@font-face {
+    font-family: 'Tahoma'; /*a name to be used later*/
+    src: url('fonts/tahoma.ttf'); /*URL to font*/
+}
+
+body{
+    background-color: black;
+}
+
 #table2{
     position: relative;
     top: 40px;
@@ -11,8 +20,8 @@
 
 .table-element-empty{
     display: block;
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     margin-left: 10px;
     border: 1px solid black;
     visibility: hidden;
@@ -20,28 +29,63 @@
 
 .table-element{
     display: block;
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     border: 1px solid black;
     background-color: white;
     margin-left: 10px;
     opacity: 1;
     transition: 0.5s;
+    user-select: none;
+    cursor: pointer;
 }
 .table-element-main{
+    color: white;
     position: absolute;
     display: block;
-    width: 50px;
-    height: 50px;
-    border: 1px solid black;
-    background-color: green;
+    width: 70px;
+    height: 70px;
+    border: 1px solid white;
+    background-color: black;
     z-index: 2;
+}
+
+.table-element-left-space{
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 75%;
+    height: 100%;
+}
+.table-element-serial{
+    position: relative;
+    top: -5px;
+    left: 2px;
+    font-size: 10pt;
+    font-family: 'Tahoma';
+}
+
+.table-element-name{
+    position: relative;
+    top: -25px;
+    left: 5px;
+    text-align: center;
+    font-size: 17pt;
+    font-family: 'Times New Roman';
+}
+
+.table-element-name-full{
+    position: relative;
+    top: -47px;
+    left: 2px;
+    font-size: 10pt;
+    font-family: 'Tahoma';
 }
 
 .table-element-isotope{
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     background-color: red;
     opacity: 0;
     z-index: 1;
