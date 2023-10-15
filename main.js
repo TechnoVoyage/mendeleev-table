@@ -12,7 +12,7 @@ function f(id) {
       duration: 300,
       easing: 'easeInOutExpo',  
     })
-    for (var i = 0; i < amount_isotopes; ++i){
+    for (var i = 0; i < element_isotopes[id_chosen].length; ++i){
     
       document.getElementById(`element-${id_chosen}-${element_isotopes[id_chosen][i]}`).style.zIndex = 0;
       anim1.add({
@@ -46,12 +46,23 @@ show_is = anime({
   duration: 1200,
   autoplay: false,
 })
-function show_isotope(id){
-  show_is.play();
+function show_isotope(q, serial){
+  show_is.play(); 
+  console.log(`element-${serial}-${element_isotopes[serial][q]}`)
+  document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.position="absolute";
+  anime({
+    targets: `#element-${serial}-${element_isotopes[serial][q]}`,
+    left: '0px',
+    duration: 1000,
+    scale: 6,
+  }).finished.then(function () {
+    // alert("SFSF");
+    document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.backgroundColor="blue";
+  })
 }
 function continue_iso(){
   show_is.direction = "reverse";
-  show_is.play();
+  // show_is.play();
 }
 
 for (var i = 0; i < 9; ++i) {
@@ -78,7 +89,7 @@ for (var i = 0; i < 9; ++i) {
     
     for (var q = 0; q < element_isotopes[serial].length; ++q){
       document.getElementById(`element-${serial}`).innerHTML += `
-      <div class="table-element-isotope" onclick=show_isotope("${element_isotopes[serial][q]}") id="element-${serial}-${element_isotopes[serial][q]}">
+      <div class="table-element-isotope" onclick=show_isotope(${q},"${serial}") id="element-${serial}-${element_isotopes[serial][q]}">
         ${element_isotopes[serial][q]}
       </div>
       `
