@@ -1,13 +1,35 @@
+id_chosen = -1;
 
 function f(id) {
+
+  
+
   amount_isotopes = element_isotopes[id].length;
   r = 70;
   angle = 2 * Math.PI / amount_isotopes;
   angle_cur = 0;
 
+  if (id_chosen != -1){
+    anim1 = anime.timeline({
+      duration: 300,
+      easing: 'easeInOutExpo',  
+    })
+    for (var i = 0; i < amount_isotopes; ++i){
+    
+      document.getElementById(`element-${id_chosen}-${element_isotopes[id_chosen][i]}`).style.zIndex = 0;
+      anim1.add({
+        targets: `#element-${id_chosen}-${element_isotopes[id_chosen][i]}`,
+        translateX: 0,
+        translateY: 0,
+      }, '-=150');
+      angle_cur += angle;
+    }
+  }
+  if (id_chosen == id) { id_chosen = -1; return;}
+  id_chosen = id;
   anim = anime.timeline({
     duration: 300,
-    easing: 'easeInOutExpo', 
+    easing: 'easeInOutExpo',  
   })
   for (var i = 0; i < amount_isotopes; ++i){
     
