@@ -85,6 +85,17 @@ function show_isotopes_around_element(id) {
   }
 }
 
+function blur_all_elements(serial){
+  for (var id = 1; id <= 118; ++id){
+    if (id == serial) continue;
+    document.getElementById(`element-${id}`).style.filter = "blur(5px)";
+  }
+}
+function unblur_all_elements(){
+  for (var id = 1; id <= 118; ++id){
+    document.getElementById(`element-${id}`).style.filter = "none";
+  }
+}
 
 text = anime({
     targets: '.new-particle-text',
@@ -105,6 +116,9 @@ function show_isotope(q, serial){
   document.getElementById('touchscreen2').style.pointerEvents = "none";
   document.getElementById('touchscreen1').style.pointerEvents = "none";
   document.getElementById('continue-new-particle').style.pointerEvents = "none";
+
+  blur_all_elements(serial)
+  
   anim_iso = anime({
     targets:`#element-${serial}-${element_isotopes[serial][q]}`,
     scale: 5,
@@ -125,7 +139,7 @@ function show_isotope(q, serial){
 }
 
 function continue_iso(){
-  console.log("closing")
+  
   document.getElementById('touchscreen2').style.pointerEvents = "none";
   document.getElementById('touchscreen1').style.pointerEvents = "none";
   document.getElementById('continue-new-particle').style.pointerEvents = "none";
@@ -139,6 +153,7 @@ function continue_iso(){
   });
   document.getElementById('touchscreen2').style.visibility = "hidden";
   document.getElementById('touchscreen2').style.zIndex = "0";
+  unblur_all_elements();
 }
 
 
