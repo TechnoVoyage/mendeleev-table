@@ -41,3 +41,20 @@
     height: 50px;
     background-color: red;
 }
+
+.new-particle-text {
+    position: absolute;
+    top: 30px;
+    left: 450px;
+    background-color: #000000;
+    border-style: solid;
+    border-radius: 20px;
+    border-color: white;
+    width: 1050px;
+    height: 600px;
+    font-size: 20pt;
+}
+.continue_button {
+    background-color: blue;
+    bottom: -100px;
+}

@@ -2,8 +2,6 @@ id_chosen = -1;
 
 function f(id) {
 
-  
-
   amount_isotopes = element_isotopes[id].length;
   r = 70;
   angle = 2 * Math.PI / amount_isotopes;
@@ -42,8 +40,18 @@ function f(id) {
     angle_cur += angle;
   }
 }
+show_is = anime({
+  targets: '.new-particle-text',
+  translateX: 1550,
+  duration: 1200,
+  autoplay: false,
+})
 function show_isotope(id){
-  alert(id)
+  show_is.play();
+}
+function continue_iso(){
+  show_is.direction = "reverse";
+  show_is.play();
 }
 
 for (var i = 0; i < 9; ++i) {
