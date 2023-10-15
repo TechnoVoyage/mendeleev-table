@@ -25,6 +25,8 @@
     border: 1px solid black;
     background-color: white;
     margin-left: 10px;
+    opacity: 1;
+    transition: 0.5s;
 }
 .table-element-main{
     position: absolute;
@@ -33,7 +35,7 @@
     height: 50px;
     border: 1px solid black;
     background-color: green;
-    z-index: 0;
+    z-index: 2;
 }
 
 .table-element-isotope{
@@ -41,4 +43,16 @@
     width: 50px;
     height: 50px;
     background-color: red;
+    opacity: 0;
+    z-index: 1;
+}
+
+.touchscreen{
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    visibility: hidden;
+    z-index: 0;
 }

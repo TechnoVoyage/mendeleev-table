@@ -1,8 +1,44 @@
+
+
 id_chosen = -1;
 
+
+document.getElementById('touchscreen').onclick = function(){
+  f(id_chosen)
+}
+function dim_table(id){
+  document.getElementById('touchscreen').style.visibility = "visible";
+  for (var i = 1; i <= 118; ++i){
+    if (i != id){
+      element = document.getElementById(`element-${i}`)
+      element.style.transition = "0"
+      element.style.zIndex = "-1";
+      element.style.transition = "0.5s"
+      
+    }
+  }
+  for (var i = 1; i <= 118; ++i){
+    if (i != id){
+      element = document.getElementById(`element-${i}`)
+      element.style.opacity = "0.5";
+      
+    }
+  }
+}
+
+function highlight_table(id){
+  document.getElementById('touchscreen').style.visibility = "hidden";
+  for (var i = 1; i <= 118; ++i){
+    if (i != id){
+      element = document.getElementById(`element-${i}`)
+      element.style.opacity = "1";
+      element.style.zIndex = "2";
+    }
+  }
+}
+
 function f(id) {
-
-
+  console.log(1)
   amount_isotopes = element_isotopes[id].length;
   r = 70;
   angle = 2 * Math.PI / amount_isotopes;
@@ -11,32 +47,35 @@ function f(id) {
   if (id_chosen != -1){
     anim1 = anime.timeline({
       duration: 300,
-      easing: 'easeInOutExpo',  
+      easing: 'easeInOutExpo',
     })
     for (var i = 0; i < element_isotopes[id_chosen].length; ++i){
-    
-      document.getElementById(`element-${id_chosen}-${element_isotopes[id_chosen][i]}`).style.zIndex = 0;
       anim1.add({
         targets: `#element-${id_chosen}-${element_isotopes[id_chosen][i]}`,
         translateX: 0,
         translateY: 0,
-      }, '-=150');
+        opacity: "0",
+      }, '-=150')
       angle_cur += angle;
     }
   }
-  if (id_chosen == id) { id_chosen = -1; return;}
+  if (id_chosen == id) { 
+    highlight_table(id);
+    id_chosen = -1; 
+    return;
+  }
+  dim_table(id);
   id_chosen = id;
   anim = anime.timeline({
     duration: 300,
     easing: 'easeInOutExpo',  
   })
   for (var i = 0; i < amount_isotopes; ++i){
-    
-    document.getElementById(`element-${id}-${element_isotopes[id][i]}`).style.zIndex = 1;
     anim.add({
       targets: `#element-${id}-${element_isotopes[id][i]}`,
       translateX: r * Math.cos(angle_cur),
       translateY: r * Math.sin(angle_cur),
+      opacity: "1",
     }, '-=150');
     angle_cur += angle;
   }
