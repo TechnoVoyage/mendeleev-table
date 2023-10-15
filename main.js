@@ -1,6 +1,26 @@
 
-
 function f(id) {
+  amount_isotopes = element_isotopes[id].length;
+  r = 70;
+  angle = 2 * Math.PI / amount_isotopes;
+  angle_cur = 0;
+
+  anim = anime.timeline({
+    duration: 300,
+    easing: 'easeInOutExpo', 
+  })
+  for (var i = 0; i < amount_isotopes; ++i){
+    
+    document.getElementById(`element-${id}-${element_isotopes[id][i]}`).style.zIndex = 1;
+    anim.add({
+      targets: `#element-${id}-${element_isotopes[id][i]}`,
+      translateX: r * Math.cos(angle_cur),
+      translateY: r * Math.sin(angle_cur),
+    }, '-=150');
+    angle_cur += angle;
+  }
+}
+function show_isotope(id){
   alert(id)
 }
 
@@ -12,15 +32,31 @@ for (var i = 0; i < 9; ++i) {
   <div class='table-row' id='table-row-${i}'></div>
   `
   for (var j = 0; j < 18; ++j) {
-    if (table_element_rel[i][j] == 0) visibility = '-empty'
+    serial = table_element_rel[i][j]
+    if (serial == 0) visibility = '-empty'
     else visibility = ''
 
-    if (table_element_rel[i][j] != 0) intext = element_names[table_element_rel[i][j]][0];
+    if (serial != 0) intext = element_names[serial][0];
     else intext = 'hui'
     document.getElementById(`table-row-${i}`).innerHTML += `
-    <div class='table-element${visibility}'  style="user-select: none;" onclick=f("${intext}_${table_element_rel[i][j].toString()}")>
-      ${intext}
-    </div>
+      <div class='table-element${visibility}'  style="user-select: none"; id="element-${serial}">
+      </div>
+    `
+    if (visibility == '-empty') continue; 
+
+    
+    
+    for (var q = 0; q < element_isotopes[serial].length; ++q){
+      document.getElementById(`element-${serial}`).innerHTML += `
+      <div class="table-element-isotope" onclick=show_isotope("${element_isotopes[serial][q]}") id="element-${serial}-${element_isotopes[serial][q]}">
+        ${element_isotopes[serial][q]}
+      </div>
+      `
+    }
+    document.getElementById(`element-${serial}`).innerHTML += `
+      <div class="table-element-main" onclick=f("${serial}")>
+      ${element_names[serial][0]}
+      </div>
     `
   }
 
