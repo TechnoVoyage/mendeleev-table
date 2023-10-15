@@ -112,6 +112,7 @@ body{
     width: 1050px;
     height: 600px;
     font-size: 20pt;
+    z-index: 2;
 }
 .continue_button {
     background-color: blue;

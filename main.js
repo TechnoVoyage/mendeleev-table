@@ -88,23 +88,27 @@ show_is = anime({
   duration: 1200,
   autoplay: false,
 })
+ani = anime.timeline({
+    duration: 1000,
+    autoplay: false,
+})
 function show_isotope(q, serial){
   show_is.play(); 
   console.log(`element-${serial}-${element_isotopes[serial][q]}`)
   document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.position="absolute";
-  anime({
+  ani.add({
     targets: `#element-${serial}-${element_isotopes[serial][q]}`,
-    left: '0px',
-    duration: 1000,
+    left: '100px',
     scale: 6,
-  }).finished.then(function () {
-    // alert("SFSF");
-    document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.backgroundColor="blue";
   })
+  ani.play()
 }
 function continue_iso(){
+  console.log("SFF")
   show_is.direction = "reverse";
-  // show_is.play();
+  ani.direction = "reverse";
+  ani.play()
+  show_is.play();
 }
 
 for (var i = 0; i < 9; ++i) {
