@@ -2,7 +2,6 @@ id_chosen = -1;
 
 function f(id) {
 
-  
 
   amount_isotopes = element_isotopes[id].length;
   r = 70;
@@ -14,7 +13,7 @@ function f(id) {
       duration: 300,
       easing: 'easeInOutExpo',  
     })
-    for (var i = 0; i < amount_isotopes; ++i){
+    for (var i = 0; i < element_isotopes[id_chosen].length; ++i){
     
       document.getElementById(`element-${id_chosen}-${element_isotopes[id_chosen][i]}`).style.zIndex = 0;
       anim1.add({
