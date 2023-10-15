@@ -2,10 +2,6 @@ id_chosen = -1;
 
 function f(id) {
 
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/new_window_isotope
   amount_isotopes = element_isotopes[id].length;
   r = 70;
   angle = 2 * Math.PI / amount_isotopes;
