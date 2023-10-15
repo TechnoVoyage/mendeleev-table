@@ -4,7 +4,8 @@
 }
 
 body{
-    background-color: black;
+    background-color: #000000;
+    overflow: hidden;
 }
 
 #table2{
@@ -89,6 +90,7 @@ body{
     background-color: red;
     opacity: 0;
     z-index: 1;
+    
 }
 
 .touchscreen{
@@ -99,7 +101,10 @@ body{
     top: 0;
     visibility: hidden;
     z-index: 0;
+    
+    
 }
+
 
 .new-particle-text {
     position: absolute;
@@ -112,9 +117,11 @@ body{
     width: 1050px;
     height: 600px;
     font-size: 20pt;
-    z-index: 2;
+    z-index: 3;
+    user-select: none;
 }
 .continue_button {
     background-color: blue;
     bottom: -100px;
+    user-select: none;
 }
