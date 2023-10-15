@@ -1,11 +1,14 @@
 id_chosen = -1;
 
 
-document.getElementById('touchscreen').onclick = function(){
+document.getElementById('touchscreen1').onclick = function(){
   f(id_chosen)
 }
+document.getElementById('touchscreen2').onclick = function(){
+    continue_iso()
+}
 function dim_table(id){
-  document.getElementById('touchscreen').style.visibility = "visible";
+  document.getElementById('touchscreen1').style.visibility = "visible";
   for (var i = 1; i <= 118; ++i){
     if (i != id){
       element = document.getElementById(`element-${i}`)
@@ -25,7 +28,7 @@ function dim_table(id){
 }
 
 function highlight_table(id){
-  document.getElementById('touchscreen').style.visibility = "hidden";
+  document.getElementById('touchscreen1').style.visibility = "hidden";
   for (var i = 1; i <= 118; ++i){
     if (i != id){
       element = document.getElementById(`element-${i}`)
@@ -92,7 +95,8 @@ anim_iso = anime.timeline({
 
 function show_isotope(q, serial){
   console.log(document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`))
-
+  document.getElementById('touchscreen2').style.visibility = "visible";
+  document.getElementById('touchscreen2').style.zIndex = "1";
   anim_iso = anime({
     targets:`#element-${serial}-${element_isotopes[serial][q]}`,
     scale: 5,
@@ -102,6 +106,8 @@ function show_isotope(q, serial){
   anim_iso.play();
   text.direction = "normal"
   text.play(); 
+  
+
 }
 
 function continue_iso(){
@@ -109,6 +115,8 @@ function continue_iso(){
     anim_iso.play();
     text.direction = "reverse";
     text.play();
+    document.getElementById('touchscreen2').style.visibility = "hidden";
+    document.getElementById('touchscreen2').style.zIndex = "0";
 }
 
 for (var i = 0; i < 9; ++i) {
