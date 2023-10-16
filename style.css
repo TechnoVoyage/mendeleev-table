@@ -105,11 +105,10 @@ body{
     
 }
 
-
 .new-particle-text {
     position: absolute;
-    top: 30px;
-    left: 450px;
+    top: 1100px;
+    left: 400px;
     background-color: #000000;
     border-style: solid;
     border-radius: 20px;

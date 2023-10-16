@@ -1,5 +1,7 @@
 id_chosen = -1;
-
+element_width = 70;
+interval_between_elements = 10;
+element_position = {}
 
 document.getElementById('touchscreen1').onclick = function(){
   show_isotopes_around_element(id_chosen)
@@ -99,7 +101,7 @@ function unblur_all_elements(){
 
 text = anime({
     targets: '.new-particle-text',
-    translateX: 1550,
+    translateY: -1050,
     autoplay: false,
     duration: 1000,
     easing: 'easeInOutExpo',
@@ -112,18 +114,24 @@ anim_iso = anime.timeline({
 
 function show_isotope(q, serial){
   document.getElementById('touchscreen2').style.visibility = "visible";
-  document.getElementById('touchscreen2').style.zIndex = "2";
+  document.getElementById('touchscreen2').style.zIndex = "3";
   document.getElementById('touchscreen2').style.pointerEvents = "none";
   document.getElementById('touchscreen1').style.pointerEvents = "none";
   document.getElementById('continue-new-particle').style.pointerEvents = "none";
+  
+  //document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.zIndex = "3";
+  //document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.pointerEvents = "none";
 
   blur_all_elements(serial)
   
+  deltax = 150 - element_position[serial][0];
+  deltay = 300 - element_position[serial][1];
+
   anim_iso = anime({
     targets:`#element-${serial}-${element_isotopes[serial][q]}`,
     scale: 5,
-    left: "100px",
-    top: "100px",
+    translateX: `${deltax}px`,
+    translateY: `${deltay}px`,
     autoplay: false,
     easing: 'easeInOutExpo',
   })
@@ -179,6 +187,7 @@ for (var i = 0; i < 9; ++i) {
     `
     if (visibility == '-empty') continue; 
 
+    element_position[serial] = [interval_between_elements * (j + 1) + element_width * j, element_width * i + (i + 1) * interval_between_elements]
     
     
     for (var q = 0; q < element_isotopes[serial].length; ++q){
