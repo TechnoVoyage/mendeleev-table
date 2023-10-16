@@ -150,6 +150,7 @@ body{
 
 .new-particle-text{
     font-family: 'Tahoma';
+    text-align: justify;
     color: white; 
     width: 95%;
     margin: auto;
@@ -162,7 +163,7 @@ body{
     height: 80px; 
     position: relative; 
     top: 550px;
-    left: 400px;
+    left: 200px;
     color: white;
     font-family: 'Tahoma';
     font-size: 20pt;
