@@ -33,7 +33,6 @@ body{
     width: 70px;
     height: 70px;
     border: 1px solid black;
-    background-color: white;
     margin-left: 10px;
     opacity: 1;
     transition: 0.5s;
@@ -43,10 +42,10 @@ body{
 .table-element-main{
     color: white;
     position: absolute;
-    display: block;
+    display: flex;
     width: 70px;
     height: 70px;
-    border: 1px solid white;
+    border: 2px solid white;
     background-color: black;
     z-index: 2;
 }
@@ -60,26 +59,26 @@ body{
 }
 .table-element-serial{
     position: relative;
-    top: -5px;
+    margin-top: 2px;
     left: 2px;
-    font-size: 10pt;
+    font-size: 9pt;
     font-family: 'Tahoma';
 }
 
 .table-element-name{
     position: relative;
-    top: -25px;
-    left: 5px;
+    top: -32px;
+    left: 0px;
     text-align: center;
-    font-size: 17pt;
+    font-size: 25pt;
     font-family: 'Times New Roman';
 }
 
 .table-element-name-full{
     position: relative;
-    top: -47px;
+    top: -67px;
     left: 2px;
-    font-size: 10pt;
+    font-size: 7.5pt; 
     font-family: 'Tahoma';
 }
 
@@ -91,6 +90,23 @@ body{
     opacity: 0;
     z-index: 1;
     
+}
+
+.table-element-dividing-line{
+    width: 0;
+    height: 65%;
+    top: 10%;
+    position: relative;
+    border: 1px solid white;
+}
+
+.table-element-isotope-num{
+    font-family: 'Tahoma';
+    font-size: 9pt;
+    top: 17px;
+    left: 5px;
+    position: relative;
+    margin-top: -14px;
 }
 
 .touchscreen{

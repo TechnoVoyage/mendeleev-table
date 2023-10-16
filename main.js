@@ -188,7 +188,7 @@ for (var i = 0; i < 9; ++i) {
     if (visibility == '-empty') continue; 
 
     element_position[serial] = [interval_between_elements * (j + 1) + element_width * j, element_width * i + (i + 1) * interval_between_elements]
-    
+    color = element_colors[serial]
     
     for (var q = 0; q < element_isotopes[serial].length; ++q){
       document.getElementById(`element-${serial}`).innerHTML += `
@@ -197,16 +197,24 @@ for (var i = 0; i < 9; ++i) {
       </div>
       `
     }
+  
     document.getElementById(`element-${serial}`).innerHTML += `
-      <div class="table-element-main" onclick=show_isotopes_around_element("${serial}")>
+      <div class="table-element-main" onclick=show_isotopes_around_element("${serial}") style="border-color: ${color}; color: ${color}">
         <div class='table-element-left-space'>
           <p class='table-element-serial'>${serial}</p>
           <p class='table-element-name'>${element_names[serial][0]}</p>
           <p class='table-element-name-full'>${element_names[serial][1]}</p>
         </div>
-        <div class='table-element-dividing-line'></div>
+        <div class='table-element-dividing-line' style="border-color: ${color}"></div>
+        <div class='table-element-right-space' id='element-${serial}-isotopes-space'>
+
+        </div>
       </div>
     `
+    for (var q = 0; q < element_isotopes[serial].length; ++q){
+      document.getElementById(`element-${serial}-isotopes-space`).innerHTML += 
+      `<p class='table-element-isotope-num'>${element_isotopes[serial][q]}</p>`
+    }
   }
 
 }
