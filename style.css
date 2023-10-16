@@ -67,16 +67,16 @@ body{
 
 .table-element-name{
     position: relative;
-    top: -32px;
+    top: -30px;
     left: 0px;
     text-align: center;
-    font-size: 25pt;
+    font-size: 23pt;
     font-family: 'Times New Roman';
 }
 
 .table-element-name-full{
     position: relative;
-    top: -67px;
+    top: -57px;
     left: 2px;
     font-size: 7.5pt; 
     font-family: 'Tahoma';
@@ -96,19 +96,26 @@ body{
 
 .table-element-dividing-line{
     width: 0;
-    height: 65%;
-    top: 10%;
+    height: 70%;
+    top: 7%;
     position: relative;
     border: 1px solid white;
 }
 
+.table-element-right-space{
+    position: relative;
+    text-align: center;
+    display: block;
+    width: 25%;
+}
+
 .table-element-isotope-num{
     font-family: 'Tahoma';
-    font-size: 9pt;
-    top: 17px;
-    left: 5px;
+    text-align: center;
+    font-size: 6.5pt;
+    top: 10px;
     position: relative;
-    margin-top: -14px;
+    margin-top: -7px;
 }
 
 .touchscreen{

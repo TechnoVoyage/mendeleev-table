@@ -2,6 +2,8 @@ id_chosen = -1;
 element_width = 70;
 interval_between_elements = 10;
 element_position = {}
+serial_chosen = -1;
+q_chosen = -1;
 
 document.getElementById('touchscreen1').onclick = function(){
   show_isotopes_around_element(id_chosen)
@@ -113,14 +115,17 @@ anim_iso = anime.timeline({
 })
 
 function show_isotope(q, serial){
+  serial_chosen = serial;
+  q_chosen = q;
+
   document.getElementById('touchscreen2').style.visibility = "visible";
-  document.getElementById('touchscreen2').style.zIndex = "3";
+  document.getElementById('touchscreen2').style.zIndex = "4";
   document.getElementById('touchscreen2').style.pointerEvents = "none";
   document.getElementById('touchscreen1').style.pointerEvents = "none";
   document.getElementById('continue-new-particle').style.pointerEvents = "none";
   
-  //document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.zIndex = "3";
-  //document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.pointerEvents = "none";
+  document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.zIndex = "3";
+  document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.pointerEvents = "none";
 
   blur_all_elements(serial)
   
@@ -148,6 +153,7 @@ function show_isotope(q, serial){
 
 function continue_iso(){
   
+  
   document.getElementById('touchscreen2').style.pointerEvents = "none";
   document.getElementById('touchscreen1').style.pointerEvents = "none";
   document.getElementById('continue-new-particle').style.pointerEvents = "none";
@@ -158,10 +164,15 @@ function continue_iso(){
   text.finished.then(function (){
     document.getElementById('touchscreen1').style.pointerEvents = "auto";
     document.getElementById('touchscreen2').style.pointerEvents = "auto";
+    document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][q_chosen]}`).style.zIndex = "1";
+    document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][q_chosen]}`).style.pointerEvents = "auto";
+    serial_chosen = -1;
+    q_chosen = -1
   });
   document.getElementById('touchscreen2').style.visibility = "hidden";
   document.getElementById('touchscreen2').style.zIndex = "0";
   unblur_all_elements();
+  
 }
 
 
