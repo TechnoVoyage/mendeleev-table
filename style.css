@@ -83,13 +83,15 @@ body{
 }
 
 .table-element-isotope{
-    position: absolute;
-    width: 70px;
-    height: 70px;
-    background-color: red;
     opacity: 0;
     z-index: 1;
-    
+
+    position: absolute;
+    display: flex;
+    width: 70px;
+    height: 70px;
+    background-color: black;
+    border: 2px solid;
 }
 
 .table-element-dividing-line{

@@ -192,8 +192,16 @@ for (var i = 0; i < 9; ++i) {
     
     for (var q = 0; q < element_isotopes[serial].length; ++q){
       document.getElementById(`element-${serial}`).innerHTML += `
-      <div class="table-element-isotope" onclick=show_isotope(${q},"${serial}") id="element-${serial}-${element_isotopes[serial][q]}">
-        ${element_isotopes[serial][q]}
+      <div class="table-element-isotope" onclick=show_isotope(${q},"${serial}") id="element-${serial}-${element_isotopes[serial][q]}" style="color: ${color}; border-color: ${color}">
+        <div class='table-element-left-space'>
+          <p class='table-element-serial'>${serial}</p>
+          <p class='table-element-name'>${element_names[serial][0]}</p>
+          <p class='table-element-name-full'>${element_names[serial][1]}</p>
+        </div>
+        <div class='table-element-dividing-line' style="border-color: ${color}"></div>
+        <div class='table-element-right-space'>
+          <p class='table-element-isotope-num'>${element_isotopes[serial][q]}</p>
+        </div>
       </div>
       `
     }
