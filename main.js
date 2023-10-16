@@ -1,5 +1,5 @@
 id_chosen = -1;
-element_width = 70;
+element_width = 60;
 interval_between_elements = 10;
 element_position = {}
 serial_chosen = -1;
@@ -198,7 +198,7 @@ for (var i = 0; i < 9; ++i) {
     `
     if (visibility == '-empty') continue; 
 
-    element_position[serial] = [interval_between_elements * (j + 1) + element_width * j, element_width * i + (i + 1) * interval_between_elements]
+    element_position[serial] = [110 + interval_between_elements * (j + 1) + element_width * j, element_width * i + (i + 1) * interval_between_elements]
     color = element_colors[serial]
     
     for (var q = 0; q < element_isotopes[serial].length; ++q){
@@ -209,7 +209,7 @@ for (var i = 0; i < 9; ++i) {
           <p class='table-element-name'>${element_names[serial][0]}</p>
           <p class='table-element-name-full'>${element_names[serial][1]}</p>
         </div>
-        <div class='table-element-dividing-line' style="border-color: ${color}"></div>
+        <div class='table-element-dividing-line' style="background-color: ${color}"></div>
         <div class='table-element-right-space'>
           <p class='table-element-isotope-num'>${element_isotopes[serial][q]}</p>
         </div>
@@ -224,7 +224,7 @@ for (var i = 0; i < 9; ++i) {
           <p class='table-element-name'>${element_names[serial][0]}</p>
           <p class='table-element-name-full'>${element_names[serial][1]}</p>
         </div>
-        <div class='table-element-dividing-line' style="border-color: ${color}"></div>
+        <div class='table-element-dividing-line' style="background-color: ${color}"></div>
         <div class='table-element-right-space' id='element-${serial}-isotopes-space'>
 
         </div>
