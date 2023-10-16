@@ -137,22 +137,43 @@ body{
     
 }
 
-.new-particle-text {
+.new-particle-plain {
     position: absolute;
     top: 1100px;
     left: 400px;
-    background-color: #000000;
-    border-style: solid;
-    border-radius: 20px;
-    border-color: white;
-    width: 1050px;
-    height: 600px;
+    width: 1100px;
+    height: 800px;
     font-size: 20pt;
-    z-index: 3;
+    z-index: 5;
     user-select: none;
 }
+
+.new-particle-text{
+    font-family: 'Tahoma';
+    color: white; 
+    width: 95%;
+    margin: auto;
+    position: relative; 
+    top: 50%; 
+    transform: translate(0, -50%);
+}
 .continue_button {
-    background-color: blue;
-    bottom: -100px;
-    user-select: none;
+    width: 300px; 
+    height: 80px; 
+    position: relative; 
+    top: 550px;
+    left: 400px;
+    color: white;
+    font-family: 'Tahoma';
+    font-size: 20pt;
+    border: 2px solid white;
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0);
+    cursor: pointer;
+    transition: 0.2s;
+}
+.continue_button:active{
+    border-color: grey;
+    color: grey;
+
 }

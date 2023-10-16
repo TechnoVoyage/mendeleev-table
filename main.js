@@ -89,21 +89,31 @@ function show_isotopes_around_element(id) {
   }
 }
 
-function blur_all_elements(serial){
+function blur_all_elements(serial, q){
   for (var id = 1; id <= 118; ++id){
-    if (id == serial) continue;
-    document.getElementById(`element-${id}`).style.filter = "blur(5px)";
+    if (id == serial) {
+      document.getElementById(`element-main-${serial}`).style.filter = "blur(5px)";
+      for (var i = 0; i < element_isotopes[serial].length; ++i){
+        if (q == i) continue;
+        document.getElementById(`element-${serial}-${element_isotopes[serial][i]}`).style.filter = "blur(5px)";
+      }
+    }
+    else document.getElementById(`element-${id}`).style.filter = "blur(5px)";
   }
 }
 function unblur_all_elements(){
   for (var id = 1; id <= 118; ++id){
     document.getElementById(`element-${id}`).style.filter = "none";
+    document.getElementById(`element-main-${id}`).style.filter = "none";
+    for (var i = 0; i < element_isotopes[serial_chosen].length; ++i){
+      document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][i]}`).style.filter = "none";
+    }
   }
 }
 
 text = anime({
-    targets: '.new-particle-text',
-    translateY: -1050,
+    targets: '.new-particle-plain',
+    translateY: -1080,
     autoplay: false,
     duration: 1000,
     easing: 'easeInOutExpo',
@@ -127,9 +137,9 @@ function show_isotope(q, serial){
   document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.zIndex = "3";
   document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.pointerEvents = "none";
 
-  blur_all_elements(serial)
+  blur_all_elements(serial, q)
   
-  deltax = 150 - element_position[serial][0];
+  deltax = 165 - element_position[serial][0];
   deltay = 300 - element_position[serial][1];
 
   anim_iso = anime({
@@ -218,7 +228,7 @@ for (var i = 0; i < 9; ++i) {
     }
   
     document.getElementById(`element-${serial}`).innerHTML += `
-      <div class="table-element-main" onclick=show_isotopes_around_element("${serial}") style="border-color: ${color}; color: ${color}">
+      <div class="table-element-main" onclick=show_isotopes_around_element("${serial}") style="border-color: ${color}; color: ${color}" id="element-main-${serial}">
         <div class='table-element-left-space'>
           <p class='table-element-serial'>${serial}</p>
           <p class='table-element-name'>${element_names[serial][0]}</p>
