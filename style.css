@@ -8,9 +8,16 @@ body{
     overflow: hidden;
 }
 
+#table1{
+    position: relative;
+    margin-left: 110px;
+    margin-top: 100px;
+}
+
 #table2{
     position: relative;
-    top: 40px;
+    top: 20px;
+    margin-left: 110px;
 }
 
 .table-row{
@@ -21,8 +28,8 @@ body{
 
 .table-element-empty{
     display: block;
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
     margin-left: 10px;
     border: 1px solid black;
     visibility: hidden;
@@ -30,10 +37,9 @@ body{
 
 .table-element{
     display: block;
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
     border: 1px solid black;
-    background-color: white;
     margin-left: 10px;
     opacity: 1;
     transition: 0.5s;
@@ -43,12 +49,15 @@ body{
 .table-element-main{
     color: white;
     position: absolute;
-    display: block;
-    width: 70px;
-    height: 70px;
-    border: 1px solid white;
+    display: flex;
+    width: 60px;
+    height: 60px;
+    border: 2px solid white;
     background-color: black;
     z-index: 2;
+}
+.table-element-main:active{
+    opacity: 0.5;
 }
 
 .table-element-left-space{
@@ -60,37 +69,62 @@ body{
 }
 .table-element-serial{
     position: relative;
-    top: -5px;
+    margin-top: 2px;
     left: 2px;
-    font-size: 10pt;
+    font-size: 8pt;
     font-family: 'Tahoma';
 }
 
 .table-element-name{
     position: relative;
-    top: -25px;
-    left: 5px;
+    top: -27px;
+    left: 0px;
     text-align: center;
-    font-size: 17pt;
+    font-size: 21pt;
     font-family: 'Times New Roman';
 }
 
 .table-element-name-full{
     position: relative;
-    top: -47px;
+    top: -55px;
     left: 2px;
-    font-size: 10pt;
+    font-size: 6.5pt; 
     font-family: 'Tahoma';
 }
 
 .table-element-isotope{
-    position: absolute;
-    width: 70px;
-    height: 70px;
-    background-color: red;
     opacity: 0;
     z-index: 1;
-    
+    position: absolute;
+    display: flex;
+    width: 60px;
+    height: 60px;
+    background-color: black;
+    border: 2px solid;
+}
+
+.table-element-dividing-line{
+    width: 0.5px;
+    height: 70%;
+    top: 7%;
+    position: relative;
+    background-color: white;
+}
+
+.table-element-right-space{
+    position: relative;
+    text-align: center;
+    display: block;
+    width: 25%;
+}
+
+.table-element-isotope-num{
+    font-family: 'Tahoma';
+    text-align: center;
+    font-size: 5pt;
+    top: 10px;
+    position: relative;
+    margin-top: -5px;
 }
 
 .touchscreen{
@@ -105,23 +139,44 @@ body{
     
 }
 
-
-.new-particle-text {
+.new-particle-plain {
     position: absolute;
-    top: 30px;
-    left: 450px;
-    background-color: #000000;
-    border-style: solid;
-    border-radius: 20px;
-    border-color: white;
-    width: 1050px;
-    height: 600px;
+    top: 1100px;
+    left: 400px;
+    width: 1100px;
+    height: 800px;
     font-size: 20pt;
-    z-index: 3;
+    z-index: 5;
     user-select: none;
 }
+
+.new-particle-text{
+    font-family: 'Tahoma';
+    text-align: justify;
+    color: white; 
+    width: 95%;
+    margin: auto;
+    position: relative; 
+    top: 50%; 
+    transform: translate(0, -50%);
+}
 .continue_button {
-    background-color: blue;
-    bottom: -100px;
-    user-select: none;
+    width: 300px; 
+    height: 80px; 
+    position: relative; 
+    top: 550px;
+    left: 200px;
+    color: white;
+    font-family: 'Tahoma';
+    font-size: 20pt;
+    border: 2px solid white;
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0);
+    cursor: pointer;
+    transition: 0.2s;
+}
+.continue_button:active{
+    border-color: grey;
+    color: grey;
+
 }
