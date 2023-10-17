@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "animejs": "^3.2.1",
+    "artnet": "^1.4.0",
     "swiper": "^10.1.0",
     "ws": "^8.14.2"
   },
