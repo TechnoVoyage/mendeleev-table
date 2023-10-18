@@ -4,7 +4,7 @@ interval_between_elements = 10;
 element_position = {}
 serial_chosen = -1;
 q_chosen = -1;
-const tableWebSocket = new WebSocket("127.0.0.1:8000")
+//const tableWebSocket = new WebSocket("127.0.0.1:8000")
 document.getElementById('touchscreen1').onclick = function(){
   show_isotopes_around_element(id_chosen)
 }
