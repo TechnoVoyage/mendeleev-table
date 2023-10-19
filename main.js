@@ -4,37 +4,48 @@ interval_between_elements = 10;
 element_position = {}
 serial_chosen = -1;
 q_chosen = -1;
-//const tableWebSocket = new WebSocket("127.0.0.1:8000")
-document.getElementById('touchscreen1').onclick = function(){
+var clicked = false
+const tableWebSocket = new WebSocket("ws://127.0.0.1:8000")
+
+function hexToRgb(hex) {
+  return {
+    r: parseInt(hex.slice(1, 3), 16),
+    g: parseInt(hex.slice(3, 5), 16),
+    b: parseInt(hex.slice(5, 7), 16)
+  }
+}
+
+document.getElementById('touchscreen1').onclick = function () {
   show_isotopes_around_element(id_chosen)
+
 }
-document.getElementById('touchscreen2').onclick = function(){
-    continue_iso()
+document.getElementById('touchscreen2').onclick = function () {
+  continue_iso()
 }
-function dim_table(id){
+function dim_table(id) {
   document.getElementById('touchscreen1').style.visibility = "visible";
-  for (var i = 1; i <= 118; ++i){
-    if (i != id){
+  for (var i = 1; i <= 118; ++i) {
+    if (i != id) {
       element = document.getElementById(`element-${i}`)
       element.style.transition = "0"
       element.style.zIndex = "-1";
       element.style.transition = "0.5s"
-      
+
     }
   }
-  for (var i = 1; i <= 118; ++i){
-    if (i != id){
+  for (var i = 1; i <= 118; ++i) {
+    if (i != id) {
       element = document.getElementById(`element-${i}`)
       element.style.opacity = "0.2";
-      
+
     }
   }
 }
 
-function highlight_table(id){
+function highlight_table(id) {
   document.getElementById('touchscreen1').style.visibility = "hidden";
-  for (var i = 1; i <= 118; ++i){
-    if (i != id){
+  for (var i = 1; i <= 118; ++i) {
+    if (i != id) {
       element = document.getElementById(`element-${i}`)
       element.style.opacity = "1";
       element.style.zIndex = "2";
@@ -44,17 +55,25 @@ function highlight_table(id){
 
 function show_isotopes_around_element(id) {
 
+ if(!clicked) {
+    var rgb = hexToRgb(element_colors[id]);
+    console.log(rgb)
+    console.log(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
+    tableWebSocket.send(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
+    clicked = true
+ }
   amount_isotopes = element_isotopes[id].length;
   r = 100;
   angle = 2 * Math.PI / amount_isotopes;
   angle_cur = 0;
 
-  if (id_chosen != -1){
+  if (id_chosen != -1) {
+    
     anim1 = anime.timeline({
       duration: 300,
       easing: 'easeInOutExpo',
     })
-    for (var i = 0; i < element_isotopes[id_chosen].length; ++i){
+    for (var i = 0; i < element_isotopes[id_chosen].length; ++i) {
       document.getElementById(`element-${id_chosen}-${element_isotopes[id_chosen][i]}`).style.zIndex = 0;
       anim1.add({
         targets: `#element-${id_chosen}-${element_isotopes[id_chosen][i]}`,
@@ -65,9 +84,10 @@ function show_isotopes_around_element(id) {
       angle_cur += angle;
     }
   }
-  if (id_chosen == id) { 
+  if (id_chosen == id) {
     highlight_table(id);
-    id_chosen = -1; 
+    id_chosen = -1;
+    clicked = false;
     return;
   }
   dim_table(id);
@@ -76,9 +96,9 @@ function show_isotopes_around_element(id) {
 
   anim = anime.timeline({
     duration: 300,
-    easing: 'easeInOutExpo',  
+    easing: 'easeInOutExpo',
   })
-  for (var i = 0; i < amount_isotopes; ++i){
+  for (var i = 0; i < amount_isotopes; ++i) {
     anim.add({
       targets: `#element-${id}-${element_isotopes[id][i]}`,
       translateX: r * Math.cos(angle_cur),
@@ -89,11 +109,11 @@ function show_isotopes_around_element(id) {
   }
 }
 
-function blur_all_elements(serial, q){
-  for (var id = 1; id <= 118; ++id){
+function blur_all_elements(serial, q) {
+  for (var id = 1; id <= 118; ++id) {
     if (id == serial) {
       document.getElementById(`element-main-${serial}`).style.filter = "blur(5px)";
-      for (var i = 0; i < element_isotopes[serial].length; ++i){
+      for (var i = 0; i < element_isotopes[serial].length; ++i) {
         if (q == i) continue;
         document.getElementById(`element-${serial}-${element_isotopes[serial][i]}`).style.filter = "blur(5px)";
       }
@@ -101,50 +121,53 @@ function blur_all_elements(serial, q){
     else document.getElementById(`element-${id}`).style.filter = "blur(5px)";
   }
 }
-function unblur_all_elements(){
-  for (var id = 1; id <= 118; ++id){
+function unblur_all_elements() {
+  for (var id = 1; id <= 118; ++id) {
     document.getElementById(`element-${id}`).style.filter = "none";
     document.getElementById(`element-main-${id}`).style.filter = "none";
-    for (var i = 0; i < element_isotopes[serial_chosen].length; ++i){
+    for (var i = 0; i < element_isotopes[serial_chosen].length; ++i) {
       document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][i]}`).style.filter = "none";
     }
   }
 }
 
 text = anime({
-    targets: '.new-particle-plain',
-    translateY: -1080,
-    autoplay: false,
-    duration: 1000,
-    easing: 'easeInOutExpo',
-  })    
+  targets: '.new-particle-plain',
+  translateY: -1080,
+  autoplay: false,
+  duration: 1000,
+  easing: 'easeInOutExpo',
+})
 anim_iso = anime.timeline({
-    autoplay: false,
-    duration: 1000,
-    easing: 'easeInOutExpo',
+  autoplay: false,
+  duration: 1000,
+  easing: 'easeInOutExpo',
 })
 
-function show_isotope(q, serial){
+function show_isotope(q, serial) {
   serial_chosen = serial;
   q_chosen = q;
-
+  const rgb = hexToRgb(element_colors[serial_chosen]);
+  tableWebSocket.send(`${serial_chosen} 6 0 0 0`);
+  console.log(`${serial_chosen} ${q_chosen} ${rgb.r} ${rgb.g} ${rgb.b}`);
+  tableWebSocket.send(`${serial_chosen} ${q_chosen} ${rgb.r} ${rgb.g} ${rgb.b}`);
   document.getElementById('touchscreen2').style.visibility = "visible";
   document.getElementById('touchscreen2').style.zIndex = "4";
   document.getElementById('touchscreen2').style.pointerEvents = "none";
   document.getElementById('touchscreen1').style.pointerEvents = "none";
   document.getElementById('continue-new-particle').style.pointerEvents = "none";
-  
+
   document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.zIndex = "3";
   document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.pointerEvents = "none";
-  
+
 
   blur_all_elements(serial, q)
-  
+
   deltax = 165 - element_position[serial][0];
   deltay = 300 - element_position[serial][1];
 
   anim_iso = anime({
-    targets:`#element-${serial}-${element_isotopes[serial][q]}`,
+    targets: `#element-${serial}-${element_isotopes[serial][q]}`,
     scale: 5,
     translateX: `${deltax}px`,
     translateY: `${deltay}px`,
@@ -153,18 +176,19 @@ function show_isotope(q, serial){
   })
   anim_iso.play()
   text.direction = "normal"
-  text.finished.then(function (){
+  text.finished.then(function () {
     document.getElementById('touchscreen1').style.pointerEvents = "auto";
     document.getElementById('touchscreen2').style.pointerEvents = "auto";
     document.getElementById('continue-new-particle').style.pointerEvents = "auto";
   });
-  text.play(); 
+  text.play();
 
 }
 
-function continue_iso(){
-  
-  
+function continue_iso() {
+
+  console.log(`${serial_chosen} ${q_chosen} 0 0 0`);
+  tableWebSocket.send(`${serial_chosen} ${q_chosen} 0 0 0`);
   document.getElementById('touchscreen2').style.pointerEvents = "none";
   document.getElementById('touchscreen1').style.pointerEvents = "none";
   document.getElementById('continue-new-particle').style.pointerEvents = "none";
@@ -172,18 +196,20 @@ function continue_iso(){
   anim_iso.play();
   text.direction = "reverse";
   text.play();
-  text.finished.then(function (){
+  text.finished.then(function () {
     document.getElementById('touchscreen1').style.pointerEvents = "auto";
     document.getElementById('touchscreen2').style.pointerEvents = "auto";
     document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][q_chosen]}`).style.zIndex = "1";
     document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][q_chosen]}`).style.pointerEvents = "auto";
+    
     serial_chosen = -1;
     q_chosen = -1
+    
   });
   document.getElementById('touchscreen2').style.visibility = "hidden";
   document.getElementById('touchscreen2').style.zIndex = "0";
   unblur_all_elements();
-  
+
 }
 
 
@@ -207,12 +233,12 @@ for (var i = 0; i < 9; ++i) {
         
       </div>
     `
-    if (visibility == '-empty') continue; 
+    if (visibility == '-empty') continue;
 
     element_position[serial] = [110 + interval_between_elements * (j + 1) + element_width * j, element_width * i + (i + 1) * interval_between_elements]
     color = element_colors[serial]
-    
-    for (var q = 0; q < element_isotopes[serial].length; ++q){
+
+    for (var q = 0; q < element_isotopes[serial].length; ++q) {
       document.getElementById(`element-${serial}`).innerHTML += `
       <div class="table-element-isotope" onclick=show_isotope(${q},"${serial}") id="element-${serial}-${element_isotopes[serial][q]}" style="color: ${color}; border-color: ${color}">
         <div class='table-element-left-space'>
@@ -227,7 +253,7 @@ for (var i = 0; i < 9; ++i) {
       </div>
       `
     }
-  
+
     document.getElementById(`element-${serial}`).innerHTML += `
       <div class="table-element-main" onclick=show_isotopes_around_element("${serial}") style="border-color: ${color}; color: ${color}" id="element-main-${serial}">
         <div class='table-element-left-space'>
@@ -241,10 +267,22 @@ for (var i = 0; i < 9; ++i) {
         </div>
       </div>
     `
-    for (var q = 0; q < element_isotopes[serial].length; ++q){
-      document.getElementById(`element-${serial}-isotopes-space`).innerHTML += 
-      `<p class='table-element-isotope-num'>${element_isotopes[serial][q]}</p>`
+    for (var q = 0; q < element_isotopes[serial].length; ++q) {
+      document.getElementById(`element-${serial}-isotopes-space`).innerHTML +=
+        `<p class='table-element-isotope-num'>${element_isotopes[serial][q]}</p>`
     }
   }
 
 }
+
+tableWebSocket.onclose = function(e) {
+  console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+  setTimeout(function() {
+    tableWebSocket = new WebSocket("ws://127.0.0.1:8000")
+  }, 1000);
+};
+
+tableWebSocket.onerror = function(err) {
+  console.error('Socket encountered error: ', err.message, 'Closing socket');
+  ws.close();
+};
