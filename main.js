@@ -5,7 +5,7 @@ element_position = {}
 serial_chosen = -1;
 q_chosen = -1;
 var clicked = false
-const tableWebSocket = new WebSocket("ws://127.0.0.1:8000")
+var tableWebSocket = new WebSocket("ws://127.0.0.1:8000")
 
 function hexToRgb(hex) {
   return {
@@ -17,6 +17,8 @@ function hexToRgb(hex) {
 
 document.getElementById('touchscreen1').onclick = function () {
   show_isotopes_around_element(id_chosen)
+  tableWebSocket.send(`${serial_chosen} 6 0 0 0`);
+console.log(serial_chosen)
 
 }
 document.getElementById('touchscreen2').onclick = function () {

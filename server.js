@@ -39,13 +39,13 @@ function sendToElement(el_index, iso_index, color) {
   //   });
   if (iso_index < 5) {
     var cnt = 0;
-    for (var i = iso_index * 28; i < (iso_index + 1) * 28; i++) {
+    for (var i = iso_index * 28 * 3; i < ((iso_index + 1) * 28)*3; i++) {
       senders[el_index].prepChannel(i, color[cnt % 3]);
       cnt++;
     }
   } else {
     var cnt = 0;
-    for (var i = iso_index * 30; i < (iso_index + 1) * 30; i++) {
+    for (var i = 5*28*3; i < (5*28+30)*3; i++) {
       senders[el_index].prepChannel(i, color[cnt % 3]);
       cnt++;
     }
@@ -58,8 +58,9 @@ wss.on('connection', function connection(ws) {
   ws.on('message', function message(msg) {
     console.log(String(msg))
     const data = String(msg).split(" ");
+    console.log(data)
     const elem = parseInt(data[0]);
-    const iso = parseInt(data[1])
+    var iso = parseInt(data[1])
     const rgb = [parseInt(data[2]), parseInt(data[3]), parseInt(data[4])]
     sendToElement(elem, iso, rgb);
   });
