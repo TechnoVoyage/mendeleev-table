@@ -27,6 +27,7 @@ document.getElementById('touchscreen2').onclick = function () {
 }
 function dim_table(id) {
   document.getElementById('touchscreen1').style.visibility = "visible";
+  document.getElementById('main-header').style.opacity = "0.2";
   for (var i = 1; i <= 118; ++i) {
     if (i != id) {
       element = document.getElementById(`element-${i}`)
@@ -47,6 +48,7 @@ function dim_table(id) {
 
 function highlight_table(id) {
   document.getElementById('touchscreen1').style.visibility = "hidden";
+  document.getElementById('main-header').style.opacity = "1";
   for (var i = 1; i <= 118; ++i) {
     if (i != id) {
       element = document.getElementById(`element-${i}`)
@@ -114,6 +116,7 @@ console.log(id)
 }
 
 function blur_all_elements(serial, q) {
+  document.getElementById('main-header').style.filter = "blur(5px)"
   for (var id = 1; id <= 118; ++id) {
     if (id == serial) {
       document.getElementById(`element-main-${serial}`).style.filter = "blur(5px)";
@@ -126,6 +129,7 @@ function blur_all_elements(serial, q) {
   }
 }
 function unblur_all_elements() {
+  document.getElementById('main-header').style.filter = "none"
   for (var id = 1; id <= 118; ++id) {
     document.getElementById(`element-${id}`).style.filter = "none";
     document.getElementById(`element-main-${id}`).style.filter = "none";
@@ -243,24 +247,28 @@ for (var i = 0; i < 9; ++i) {
     element_position[serial] = [110 + interval_between_elements * (j + 1) + element_width * j, element_width * i + (i + 1) * interval_between_elements]
     color = element_colors[serial]
 
-    for (var q = 0; q < element_isotopes[serial].length; ++q) {
-      document.getElementById(`element-${serial}`).innerHTML += `
-      <div class="table-element-isotope" onclick=show_isotope(${q},"${serial}") id="element-${serial}-${element_isotopes[serial][q]}" style="color: ${color}; border-color: ${color}">
-        <div class='table-element-left-space'>
-          <p class='table-element-serial'>${serial}</p>
-          <p class='table-element-name'>${element_names[serial][0]}</p>
-          <p class='table-element-name-full'>${element_names[serial][1]}</p>
-        </div>
-        <div class='table-element-dividing-line' style="background-color: ${color}"></div>
-        <div class='table-element-right-space'>
-          <p class='table-element-isotope-num'>${element_isotopes[serial][q]}</p>
-        </div>
-      </div>
-      `
-    }
 
+    if (serial < 114 || serial > 118){
+      for (var q = 0; q < element_isotopes[serial].length; ++q) {
+        document.getElementById(`element-${serial}`).innerHTML += `
+        <div class="table-element-isotope" onclick=show_isotope(${q},"${serial}") id="element-${serial}-${element_isotopes[serial][q]}" style="color: ${color}; border-color: ${color}">
+          <div class='table-element-left-space'>
+            <p class='table-element-serial'>${serial}</p>
+            <p class='table-element-name'>${element_names[serial][0]}</p>
+            <p class='table-element-name-full'>${element_names[serial][1]}</p>
+          </div>
+          <div class='table-element-dividing-line' style="background-color: ${color}"></div>
+          <div class='table-element-right-space'>
+            <p class='table-element-isotope-num'>${element_isotopes[serial][q]}</p>
+          </div>
+        </div>
+        `
+      }
+    } 
+    if (serial < 114 || serial > 118) onclickf = `onclick=show_isotopes_around_element("${serial}")`;
+    else onclickf = '';
     document.getElementById(`element-${serial}`).innerHTML += `
-      <div class="table-element-main" onclick=show_isotopes_around_element("${serial}") style="border-color: ${color}; color: ${color}" id="element-main-${serial}">
+      <div class="table-element-main" ${onclickf} style="border-color: ${color}; color: ${color}" id="element-main-${serial}">
         <div class='table-element-left-space'>
           <p class='table-element-serial'>${serial}</p>
           <p class='table-element-name'>${element_names[serial][0]}</p>
