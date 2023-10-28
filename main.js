@@ -56,6 +56,9 @@ animations = [
         for (var serial = 1; serial <= 118; ++serial){
           if (active) return;
           table_show(`${serial} 6 ${r} ${g} ${b}`);
+          r = (r > 255 ? 255 : (r < 0 ? 0 : r))
+          g = (g > 255 ? 255 : (g < 0 ? 0 : g))
+          b = (b > 255 ? 255 : (b < 0 ? 0 : b))
           tableWebSocket.send(`${serial} 6 ${r} ${g} ${b}`)
           
         }
@@ -72,6 +75,9 @@ animations = [
         for (var serial = 1; serial <= 118; ++serial){
           if (active) return;
           table_show(`${serial} 6 ${r} ${g} ${b}`);
+          r = (r > 255 ? 255 : (r < 0 ? 0 : r))
+          g = (g > 255 ? 255 : (g < 0 ? 0 : g))
+          b = (b > 255 ? 255 : (b < 0 ? 0 : b))
           tableWebSocket.send(`${serial} 6 ${r} ${g} ${b}`);
         }
         r -= deltar
@@ -81,6 +87,9 @@ animations = [
       }
       for (var serial = 1; serial <= 118; ++serial){
         table_show(`${serial} 6 0 0 0`);  
+        r = (r > 255 ? 255 : (r < 0 ? 0 : r))
+        g = (g > 255 ? 255 : (g < 0 ? 0 : g))
+        b = (b > 255 ? 255 : (b < 0 ? 0 : b))
         tableWebSocket.send(`${serial} 6 0 0 0`);
       }
     }
@@ -99,6 +108,9 @@ animations = [
         }
         else {
           table_show(`${ser} 6 ${r1} ${g1} ${b1}`);
+          r1 = (r1 > 255 ? 255 : (r1 < 0 ? 0 : r1))
+          g1 = (g1 > 255 ? 255 : (g1 < 0 ? 0 : g1))
+          b1 = (b1 > 255 ? 255 : (b1 < 0 ? 0 : b1))
           tableWebSocket.send(`${ser} 6 ${r1} ${g1} ${b1}`);
         }
       }
@@ -136,6 +148,11 @@ animations = [
         }
 
         table_show(`${ser} 6 ${colors_cur[ser - 1][0]} ${colors_cur[ser - 1][1]} ${colors_cur[ser - 1][2]}`)
+        
+        r1 = colors_cur[ser - 1]
+        colors_cur[ser - 1][0] = (r > 255 ? 255 : (r < 0 ? 0 : r))
+        colors_cur[ser - 1][1] = (g > 255 ? 255 : (g < 0 ? 0 : g))
+        colors_cur[ser - 1][2] = (b > 255 ? 255 : (b < 0 ? 0 : b))
         tableWebSocket.send(`${ser} 6 ${colors_cur[ser - 1][0]} ${colors_cur[ser - 1][1]} ${colors_cur[ser - 1][2]}`);
       }
       await sleep(50)
