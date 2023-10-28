@@ -53,7 +53,7 @@ animations = [
       deltab = parseFloat(color[2]) / iter
 
       for (var j = 0; j < iter; ++j){
-        for (var serial = 1; serial <= 118; ++serial){
+        for (var serial = 1; serial <= 113; ++serial){
           if (active) return;
           table_show(`${serial} 6 ${r} ${g} ${b}`);
           r = (r > 255 ? 255 : (r < 0 ? 0 : r))
@@ -72,7 +72,7 @@ animations = [
       b = color[2]
 
       for (var j = 0; j < iter; ++j){
-        for (var serial = 1; serial <= 118; ++serial){
+        for (var serial = 1; serial <= 113; ++serial){
           if (active) return;
           table_show(`${serial} 6 ${r} ${g} ${b}`);
           r = (r > 255 ? 255 : (r < 0 ? 0 : r))
@@ -85,7 +85,7 @@ animations = [
         b -= deltab
         await sleep(50)
       }
-      for (var serial = 1; serial <= 118; ++serial){
+      for (var serial = 1; serial <= 113; ++serial){
         table_show(`${serial} 6 0 0 0`);  
         r = (r > 255 ? 255 : (r < 0 ? 0 : r))
         g = (g > 255 ? 255 : (g < 0 ? 0 : g))
@@ -101,7 +101,7 @@ animations = [
       b1 = Math.random() * 255
       
       
-      for (var ser = 1; ser <= 118; ++ser){
+      for (var ser = 1; ser <= 113; ++ser){
         if (Math.random() > 0.5){
           table_show(`${ser} 6 0 0 0`);
           tableWebSocket.send(`${serial} 6 0 0 0`); 
@@ -117,7 +117,7 @@ animations = [
       
       await sleep(1000);
     }
-    for (var ser = 1; ser <= 118; ++ser){
+    for (var ser = 1; ser <= 113; ++ser){
       table_show(`${ser} 6 0 0 0`);
       tableWebSocket.send(`${serial} 6 0 0 0`); 
     }
@@ -128,7 +128,7 @@ animations = [
     colors1 = []
     colors_cur = []
     deltas = []
-    for (var ser = 1; ser <= 118; ++ser){
+    for (var ser = 1; ser <= 113; ++ser){
       colors_cur.push([0, 0, 0])
       iter = parseFloat(20 + getRndInteger(0, 31))
       
@@ -136,7 +136,7 @@ animations = [
     }
 
     for (var i = 0; i < 500; ++i){
-      for (var ser = 1; ser <= 118; ++ser){
+      for (var ser = 1; ser <= 113; ++ser){
         colors_cur[ser - 1][0] += deltas[ser - 1][0];
         colors_cur[ser - 1][1] += deltas[ser - 1][1];
         colors_cur[ser - 1][2] += deltas[ser - 1][2];
@@ -157,7 +157,7 @@ animations = [
       }
       await sleep(50)
     }
-    for (var ser = 1; ser <= 118; ++ser){
+    for (var ser = 1; ser <= 113; ++ser){
       table_show(`${ser} 6 0 0 0`);
       tableWebSocket.send(`${ser} 6 0 0 0`);
     }
