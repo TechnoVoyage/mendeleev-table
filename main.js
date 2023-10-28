@@ -62,7 +62,7 @@ function show_isotopes_around_element(id) {
   tableWebSocket.send(`${id} 6 0 0 0`);
 console.log(id)
  if(!clicked) {
-    var rgb = hexToRgb(element_colors[id]);
+    var rgb = hexToRgb(send_element_colors[id]);
     console.log(rgb)
     console.log(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
     tableWebSocket.send(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
@@ -156,7 +156,7 @@ function show_isotope(q, serial) {
   serial_chosen = serial;
   q_chosen = q;
   console.log(q_chosen)
-  const rgb = hexToRgb(element_colors[serial_chosen]);
+  const rgb = hexToRgb(send_element_colors[serial_chosen]);
   //tableWebSocket.send(`${serial_chosen} 6 0 0 0`);
   console.log(`${serial_chosen} ${6-q_chosen-2} ${rgb.r} ${rgb.g} ${rgb.b}`);
   tableWebSocket.send(`${serial_chosen} ${6-q_chosen-2} ${rgb.r} ${rgb.g} ${rgb.b}`);
