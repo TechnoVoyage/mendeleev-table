@@ -1,3 +1,4 @@
+const WebSocketServer = require("ws/lib/websocket-server");
 
 
 id_chosen = -1;
@@ -8,6 +9,7 @@ serial_chosen = -1;
 q_chosen = -1;
 var clicked = false
 var tableWebSocket = new WebSocket("ws://127.0.0.1:8000")
+active = false
 
 function hexToRgb(hex) {
   return {
@@ -16,6 +18,137 @@ function hexToRgb(hex) {
     b: parseInt(hex.slice(5, 7), 16)
   }
 }
+
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min) ) + min;
+}
+
+function table_show(s){
+  arr = s.split(' ')
+  serial = parseInt(arr[0])
+  q = parseInt(arr[1])
+  r = parseInt(arr[2])
+  g = parseInt(arr[3])
+  b = parseInt(arr[4])
+  if (r == 0 && g == 0 && b == 0) {
+    c = 20 + (q - 1) / 5 * 50
+    document.getElementById(`mini-element-${serial}-${q}`).style.backgroundColor = `rgb(${c}, ${c}, ${c})`;
+  } else{
+    document.getElementById(`mini-element-${serial}-${q}`).style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+  }
+}
+
+const sleep = ms => new Promise(r111 => setTimeout(r111, ms));
+animations = [
+  async function (){
+    colors = [[255, 0, 0], [255, 136, 0], [0, 255, 0], [0, 255, 217], [0, 0, 255], [255, 0, 234]];
+    for (var i = 0; i < 6; ++i){
+      r = 0;
+      g = 0;
+      b = 0;
+      color = colors[i]
+      iter = 50
+      deltar = parseFloat(color[0]) / iter
+      deltag = parseFloat(color[1]) / iter
+      deltab = parseFloat(color[2]) / iter
+
+      for (var j = 0; j < iter; ++j){
+        for (var serial = 1; serial <= 118; ++serial){
+          if (active) return;
+          table_show(`${serial} 6 ${r} ${g} ${b}`);
+          tableWebSocket.send(`${serial} 6 ${r} ${g} ${b}`)
+          
+        }
+        r += deltar
+        g += deltag
+        b += deltab
+        await sleep(50)
+      }
+      r = color[0]
+      g = color[1]
+      b = color[2]
+
+      for (var j = 0; j < iter; ++j){
+        for (var serial = 1; serial <= 118; ++serial){
+          if (active) return;
+          table_show(`${serial} 6 ${r} ${g} ${b}`);
+          tableWebSocket.send(`${serial} 6 ${r} ${g} ${b}`);
+        }
+        r -= deltar
+        g -= deltag
+        b -= deltab
+        await sleep(50)
+      }
+      for (var serial = 1; serial <= 118; ++serial){
+        table_show(`${serial} 6 0 0 0`);  
+        tableWebSocket.send(`${serial} 6 0 0 0`);
+      }
+    }
+  }, 
+  async function(){
+    for (var i = 0; i < 10; ++i){
+      r1 = Math.random() * 255
+      g1 = Math.random() * 255
+      b1 = Math.random() * 255
+      
+      
+      for (var ser = 1; ser <= 118; ++ser){
+        if (Math.random() > 0.5){
+          table_show(`${ser} 6 0 0 0`);
+          tableWebSocket.send(`${serial} 6 0 0 0`); 
+        }
+        else {
+          table_show(`${ser} 6 ${r1} ${g1} ${b1}`);
+          tableWebSocket(`${ser} 6 ${r1} ${g1} ${b1}`);
+        }
+      }
+      
+      await sleep(1000);
+    }
+    for (var ser = 1; ser <= 118; ++ser){
+      table_show(`${ser} 6 0 0 0`);
+      tableWebSocket.send(`${serial} 6 0 0 0`); 
+    }
+  }, 
+  async function (){
+    col = [[255, 0, 0], [255, 136, 0], [0, 255, 0], [0, 255, 217], [0, 0, 255], [255, 0, 234]]
+    color1 = col[getRndInteger(0, 6)]
+    colors1 = []
+    colors_cur = []
+    deltas = []
+    for (var ser = 1; ser <= 118; ++ser){
+      colors_cur.push([0, 0, 0])
+      iter = parseFloat(20 + getRndInteger(0, 31))
+      
+      deltas.push([color1[0] / iter, color1[1] / iter, color1[2] / iter])
+    }
+
+    for (var i = 0; i < 500; ++i){
+      for (var ser = 1; ser <= 118; ++ser){
+        colors_cur[ser - 1][0] += deltas[ser - 1][0];
+        colors_cur[ser - 1][1] += deltas[ser - 1][1];
+        colors_cur[ser - 1][2] += deltas[ser - 1][2];
+        if ((colors_cur[ser - 1][0] >= color1[0] & colors_cur[ser - 1][1] >= color1[1]  & colors_cur[ser - 1][1] >= color1[1] )
+        || (colors_cur[ser - 1][0] <= 0 & colors_cur[ser - 1][1] <= 0 & colors_cur[ser - 1][2] <= 0)) {
+          deltas[ser - 1][0] *= -1;
+          deltas[ser - 1][1] *= -1;
+          deltas[ser - 1][2] *= -1;
+        }
+
+        table_show(`${ser} 6 ${colors_cur[ser - 1][0]} ${colors_cur[ser - 1][1]} ${colors_cur[ser - 1][2]}`)
+        tableWebSocket.send(`${ser} 6 ${colors_cur[ser - 1][0]} ${colors_cur[ser - 1][1]} ${colors_cur[ser - 1][2]}`);
+      }
+      await sleep(50)
+    }
+    for (var ser = 1; ser <= 118; ++ser){
+      table_show(`${ser} 6 0 0 0`);
+      tableWebSocket.send(`${ser} 6 0 0 0`);
+    }
+  }, 
+
+]
+
+
 
 document.getElementById('touchscreen1').onclick = function () {
   show_isotopes_around_element(id_chosen)
@@ -60,14 +193,15 @@ function highlight_table(id) {
 
 function show_isotopes_around_element(id) {
   tableWebSocket.send(`${id} 6 0 0 0`);
-console.log(id)
- if(!clicked) {
+  table_show(`${id} 6 0 0 0`)
+  
+  if(!clicked) {
     var rgb = hexToRgb(element_colors[id]);
-    console.log(rgb)
-    console.log(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
+
     tableWebSocket.send(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
+    table_show(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
     clicked = true
- }
+  }
   amount_isotopes = element_isotopes[id].length;
   r = 100;
   angle = 2 * Math.PI / amount_isotopes;
@@ -155,11 +289,11 @@ anim_iso = anime.timeline({
 function show_isotope(q, serial) {
   serial_chosen = serial;
   q_chosen = q;
-  console.log(q_chosen)
   const rgb = hexToRgb(element_colors[serial_chosen]);
   //tableWebSocket.send(`${serial_chosen} 6 0 0 0`);
-  console.log(`${serial_chosen} ${6-q_chosen-2} ${rgb.r} ${rgb.g} ${rgb.b}`);
   tableWebSocket.send(`${serial_chosen} ${6-q_chosen-2} ${rgb.r} ${rgb.g} ${rgb.b}`);
+  table_show(`${serial_chosen} ${6-q_chosen-2} ${rgb.r} ${rgb.g} ${rgb.b}`)
+
   document.getElementById('touchscreen2').style.visibility = "visible";
   document.getElementById('touchscreen2').style.zIndex = "4";
   document.getElementById('touchscreen2').style.pointerEvents = "none";
@@ -196,8 +330,9 @@ function show_isotope(q, serial) {
 
 function continue_iso() {
 
-  console.log(`${serial_chosen} ${6-q_chosen-2} 0 0 0`);
+
   tableWebSocket.send(`${serial_chosen} ${6-q_chosen-2} 0 0 0`);
+  table_show(`${serial_chosen} ${6-q_chosen-2} 0 0 0`)
   document.getElementById('touchscreen2').style.pointerEvents = "none";
   document.getElementById('touchscreen1').style.pointerEvents = "none";
   document.getElementById('continue-new-particle').style.pointerEvents = "none";
@@ -230,6 +365,7 @@ for (var i = 0; i < 9; ++i) {
   document.getElementById('table' + ind).innerHTML += `
   <div class='table-row' id='table-row-${i}'></div>
   `
+
   for (var j = 0; j < 18; ++j) {
     serial = table_element_rel[i][j]
     if (serial == 0) visibility = '-empty'
@@ -242,6 +378,8 @@ for (var i = 0; i < 9; ++i) {
         
       </div>
     `
+
+
     if (visibility == '-empty') continue;
 
     element_position[serial] = [110 + interval_between_elements * (j + 1) + element_width * j, element_width * i + (i + 1) * interval_between_elements]
@@ -263,7 +401,10 @@ for (var i = 0; i < 9; ++i) {
           </div>
         </div>
         `
+        
+        
       }
+      
     } 
     if (serial < 114 || serial > 118) onclickf = `onclick=show_isotopes_around_element("${serial}")`;
     else onclickf = '';
@@ -288,6 +429,27 @@ for (var i = 0; i < 9; ++i) {
 
 }
 
+for (var i = 0; i < 9; ++i){
+  document.getElementById('mini-table-window').innerHTML += `
+    <div style='display: flex; margin-top: 30px;' id='mini-table-row-${i}'></div>
+  `
+  for (var j = 0; j < 18; ++j){
+    serial = table_element_rel[i][j]
+
+    document.getElementById(`mini-table-row-${i}`).innerHTML += `
+      <div style='display: flex; margin-left: 10px;' id='mini-table-element-box-${serial}'></div>
+    `
+
+    for (var q = 0; q < 6; ++q){
+      if (table_element_rel[i][j] == 0) c = 0;
+      else c = 20 + (q) / 5 * 50
+      document.getElementById(`mini-table-row-${i}`).innerHTML += `
+        <div style='display: block; width: 10px; height: 10px; position: relative; left: 5px; top: ${(q) * 5}px; background-color: rgb(${c}, ${c}, ${c});' id='mini-element-${serial}-${q + 1}'></div>
+      `
+    }
+  }
+}
+
 tableWebSocket.onclose = function(e) {
   console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
   setTimeout(function() {
@@ -299,3 +461,5 @@ tableWebSocket.onerror = function(err) {
   console.error('Socket encountered error: ', err.message, 'Closing socket');
   ws.close();
 };
+
+animations[0]()
