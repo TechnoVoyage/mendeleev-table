@@ -1,4 +1,4 @@
-const WebSocketServer = require("ws/lib/websocket-server");
+
 
 
 id_chosen = -1;
@@ -99,7 +99,7 @@ animations = [
         }
         else {
           table_show(`${ser} 6 ${r1} ${g1} ${b1}`);
-          tableWebSocket(`${ser} 6 ${r1} ${g1} ${b1}`);
+          tableWebSocket.send(`${ser} 6 ${r1} ${g1} ${b1}`);
         }
       }
       
