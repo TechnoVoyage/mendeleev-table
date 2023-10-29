@@ -64,9 +64,10 @@ function highlight_table(id) {
 
 function show_isotopes_around_element(id) {
   console.log(id_chosen + "ID_SCHONES")
-  tableWebSocket.send(`${id} 6 0 0 0`);
- if(!clicked) {
   var rgb = hexToRgb(send_element_colors_on[id]);
+  tableWebSocket.send(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
+ if(!clicked) {
+  rgb = hexToRgb(send_element_colors_on[id]);
   console.log(rgb)
   console.log(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
     clicked = true
@@ -81,7 +82,8 @@ function show_isotopes_around_element(id) {
   if (clicked_touchscreen) {
     console.log("clicked_touchscreen")
     //console.log("id chosen != -1")
-
+    var rgb = hexToRgb(send_element_colors[id]);
+  tableWebSocket.send(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
     anim1 = anime.timeline({
       duration: 300,
       easing: 'easeInOutExpo',
@@ -106,7 +108,6 @@ function show_isotopes_around_element(id) {
 
   if (id_chosen != -1) {
     clicked_touchscreen = false
-
     console.log("id_chosen != -1")
     show_isotope(-1, id_chosen)
     return
@@ -239,10 +240,11 @@ function show_isotope(q, serial) {
 }
 function continue_iso() {
   // console.log(`${serial_chosen} ${6-q_chosen-2} 0 0 0`);
-  if (q_chosen == -1) {
-    tableWebSocket.send(`${serial_chosen} ${6} 0 0 0`);
+  var rgb = hexToRgb(send_element_colors[last_id]);
+  if (q_chosen != -1) {
+    tableWebSocket.send(`${serial_chosen} ${6-q_chosen-2} 0 0 0`);
   } 
-  else tableWebSocket.send(`${serial_chosen} ${6-q_chosen-2} 0 0 0`);
+
 
   document.getElementById('touchscreen2').style.pointerEvents = "none";
   document.getElementById('touchscreen1').style.pointerEvents = "none";
