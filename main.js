@@ -169,6 +169,8 @@ function show_isotope(q, serial) {
   document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.zIndex = "3";
   document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.pointerEvents = "none";
 
+  document.getElementById('text').textContent = element_names[serial] + element_isotopes[serial][q]
+
 
   blur_all_elements(serial, q)
 
