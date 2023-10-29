@@ -316,7 +316,9 @@ for (var i = 0; i < 9; ++i) {
         </div>
         `
       }
+
     } 
+
     onclickf = `onclick=show_isotopes_around_element("${serial}")`;
     
     document.getElementById(`element-${serial}`).innerHTML += `
