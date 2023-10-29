@@ -5,7 +5,7 @@ const fs = require('fs')
 const senders = {}
 console.log(consts.element_adresses[112])
 const wss = new WebSocket.WebSocketServer({ port: 8000 });
-const flash_path = "/media/ippishio/607E10AD7E107DCA"
+const flash_path = "/media/mendeleev/texts"
 
 var dmxnet = new dmxlib.dmxnet({
   log: { level: 'info' },
