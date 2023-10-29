@@ -133,7 +133,8 @@ function blur_all_elements(serial, q) {
   document.getElementById('main-header').style.filter = "blur(5px)"
   for (var id = 1; id <= 118; ++id) {
     if (id == serial) {
-      document.getElementById(`element-main-${serial}`).style.filter = "blur(5px)";
+      if(q != -1) 
+        document.getElementById(`element-main-${serial}`).style.filter = "blur(5px)";
       for (var i = 0; i < element_isotopes[serial].length; ++i) {
         if (q == i) continue;
         document.getElementById(`element-${serial}-${element_isotopes[serial][i]}`).style.filter = "blur(5px)";
@@ -193,20 +194,33 @@ function show_isotope(q, serial) {
 
 
   blur_all_elements(serial, q)
-
+  console.log(element_position[serial])
   deltax = 165 - element_position[serial][0];
   deltay = 300 - element_position[serial][1];
-
-  if (q == - 1) target = `#element-main-${serial}`
-  else target = `#element-${serial}-${element_isotopes[serial][q]}`
-  anim_iso = anime({
+  console.log(deltax)
+  console.log(deltay)
+  if (q == -1) {
+    target = `#element-main-${serial}`
+    anim_iso = anime({
+      targets: target,
+      translateX: deltax,
+      translateY: deltay,
+      scale: 5,
+      autoplay: false,
+      easing: 'easeInOutExpo',
+    })
+  }
+  else {
+    target = `#element-${serial}-${element_isotopes[serial][q]}`
+    anim_iso = anime({
     targets: target,
     scale: 5,
-    translateX: `${deltax}px`,
-    translateY: `${deltay}px`,
+    translateX: deltax,
+    translateY: deltay,
     autoplay: false,
     easing: 'easeInOutExpo',
-  })
+    })
+  }
   anim_iso.play()
   text.direction = "normal"
   text.finished.then(function () {
@@ -296,8 +310,8 @@ for (var i = 0; i < 9; ++i) {
         `
       }
     } 
-    if (serial < 114 || serial > 118) onclickf = `onclick=show_isotopes_around_element("${serial}")`;
-    else onclickf = '';
+    onclickf = `onclick=show_isotopes_around_element("${serial}")`;
+    
     document.getElementById(`element-${serial}`).innerHTML += `
       <div class="table-element-main" ${onclickf} style="border-color: ${color}; color: ${color}" id="element-main-${serial}">
         <div class='table-element-left-space'>
