@@ -173,7 +173,8 @@ function show_isotope(q, serial) {
   document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.zIndex = "3";
   document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.pointerEvents = "none";
   getText = false
-  tableWebSocket.send(`text ${serial} ${element_isotopes[serial][q]}`)
+  if(q != -1) tableWebSocket.send(`text ${serial} ${element_isotopes[serial][q]}`)
+  else tableWebSocket.send(`text ${serial} 0`)
   setInterval(() => {document.getElementById('text').textContent = iso_text}, 100)
 
 
