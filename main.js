@@ -6,8 +6,11 @@ interval_between_elements = 10;
 element_position = {}
 serial_chosen = -1;
 q_chosen = -1;
+var last_id = 0
 var clicked = false
 var tableWebSocket = new WebSocket("ws://127.0.0.1:8000")
+var iso_text = "test"
+var getText = false
 
 function hexToRgb(hex) {
   return {
@@ -59,14 +62,13 @@ function highlight_table(id) {
 }
 
 function show_isotopes_around_element(id) {
-  tableWebSocket.send(`${id} 6 0 0 0`);
-console.log(id)
  if(!clicked) {
-    var rgb = hexToRgb(send_element_colors[id]);
+    var rgb = hexToRgb(send_element_colors_on[id]);
     console.log(rgb)
     console.log(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
     tableWebSocket.send(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
     clicked = true
+    last_id = id
  }
   amount_isotopes = element_isotopes[id].length;
   r = 100;
@@ -74,7 +76,9 @@ console.log(id)
   angle_cur = 0;
 
   if (id_chosen != -1) {
-    
+    var rgb = hexToRgb(send_element_colors[id_chosen]);
+  tableWebSocket.send(`${id_chosen} 6 ${rgb.r} ${rgb.g} ${rgb.b}`);
+  console.log("hui")
     anim1 = anime.timeline({
       duration: 300,
       easing: 'easeInOutExpo',
@@ -156,7 +160,7 @@ function show_isotope(q, serial) {
   serial_chosen = serial;
   q_chosen = q;
   console.log(q_chosen)
-  const rgb = hexToRgb(send_element_colors[serial_chosen]);
+  const rgb = hexToRgb(send_element_colors_on[serial_chosen]);
   //tableWebSocket.send(`${serial_chosen} 6 0 0 0`);
   console.log(`${serial_chosen} ${6-q_chosen-2} ${rgb.r} ${rgb.g} ${rgb.b}`);
   tableWebSocket.send(`${serial_chosen} ${6-q_chosen-2} ${rgb.r} ${rgb.g} ${rgb.b}`);
@@ -168,8 +172,9 @@ function show_isotope(q, serial) {
 
   document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.zIndex = "3";
   document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.pointerEvents = "none";
-
-  document.getElementById('text').textContent = element_names[serial] + element_isotopes[serial][q]
+  getText = false
+  tableWebSocket.send(`text ${serial} ${element_isotopes[serial][q]}`)
+  setInterval(() => {document.getElementById('text').textContent = iso_text}, 100)
 
 
   blur_all_elements(serial, q)
@@ -195,9 +200,8 @@ function show_isotope(q, serial) {
   text.play();
 
 }
-
 function continue_iso() {
-
+  // var rgb = hexToRgb(send_element_colors[last_id]);
   console.log(`${serial_chosen} ${6-q_chosen-2} 0 0 0`);
   tableWebSocket.send(`${serial_chosen} ${6-q_chosen-2} 0 0 0`);
   document.getElementById('touchscreen2').style.pointerEvents = "none";
@@ -289,7 +293,11 @@ for (var i = 0; i < 9; ++i) {
   }
 
 }
-
+tableWebSocket.onmessage = function(e) {
+  iso_text = e.data;
+  getText = true
+  console.log(iso_text)
+}
 tableWebSocket.onclose = function(e) {
   console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
   setTimeout(function() {
@@ -301,3 +309,10 @@ tableWebSocket.onerror = function(err) {
   console.error('Socket encountered error: ', err.message, 'Closing socket');
   ws.close();
 };
+tableWebSocket.onopen = function(e) {
+  for(var i = 1; i <= 118; i++) {
+    const rgb = hexToRgb(send_element_colors[i]);
+    tableWebSocket.send(`${i} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
+    console.log(`${i} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
+  }
+}
