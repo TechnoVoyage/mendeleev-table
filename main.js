@@ -1,5 +1,5 @@
 
-
+clicked_touchscreen = false
 id_chosen = -1;
 element_width = 60;
 interval_between_elements = 10;
@@ -21,8 +21,9 @@ function hexToRgb(hex) {
 }
 
 document.getElementById('touchscreen1').onclick = function () {
+  console.log("click touchscreen1")
+  clicked_touchscreen = true
   show_isotopes_around_element(id_chosen)
-  
 
 }
 document.getElementById('touchscreen2').onclick = function () {
@@ -62,11 +63,12 @@ function highlight_table(id) {
 }
 
 function show_isotopes_around_element(id) {
+  console.log(id_chosen + "ID_SCHONES")
+  tableWebSocket.send(`${id} 6 0 0 0`);
  if(!clicked) {
-    var rgb = hexToRgb(send_element_colors_on[id]);
-    console.log(rgb)
-    console.log(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
-    tableWebSocket.send(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
+  var rgb = hexToRgb(send_element_colors_on[id]);
+  console.log(rgb)
+  console.log(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
     clicked = true
     last_id = id
  }
@@ -75,10 +77,11 @@ function show_isotopes_around_element(id) {
   angle = 2 * Math.PI / amount_isotopes;
   angle_cur = 0;
 
-  if (id_chosen != -1) {
-    var rgb = hexToRgb(send_element_colors[id_chosen]);
-  tableWebSocket.send(`${id_chosen} 6 ${rgb.r} ${rgb.g} ${rgb.b}`);
-  console.log("hui")
+
+  if (clicked_touchscreen) {
+    console.log("clicked_touchscreen")
+    //console.log("id chosen != -1")
+
     anim1 = anime.timeline({
       duration: 300,
       easing: 'easeInOutExpo',
@@ -93,13 +96,23 @@ function show_isotopes_around_element(id) {
       }, '-=150')
       angle_cur += angle;
     }
-  }
-  if (id_chosen == id) {
+    //show_isotope(-1, id_chosen)
     highlight_table(id);
     id_chosen = -1;
     clicked = false;
+    clicked_touchscreen = false
     return;
+  } 
+
+  if (id_chosen != -1) {
+    clicked_touchscreen = false
+
+    console.log("id_chosen != -1")
+    show_isotope(-1, id_chosen)
+    return
   }
+  
+
   dim_table(id);
   id_chosen = id;
 
@@ -123,7 +136,8 @@ function blur_all_elements(serial, q) {
   document.getElementById('main-header').style.filter = "blur(5px)"
   for (var id = 1; id <= 118; ++id) {
     if (id == serial) {
-      document.getElementById(`element-main-${serial}`).style.filter = "blur(5px)";
+      if(q != -1) 
+        document.getElementById(`element-main-${serial}`).style.filter = "blur(5px)";
       for (var i = 0; i < element_isotopes[serial].length; ++i) {
         if (q == i) continue;
         document.getElementById(`element-${serial}-${element_isotopes[serial][i]}`).style.filter = "blur(5px)";
@@ -162,7 +176,7 @@ function show_isotope(q, serial) {
   console.log(q_chosen)
   const rgb = hexToRgb(send_element_colors_on[serial_chosen]);
   //tableWebSocket.send(`${serial_chosen} 6 0 0 0`);
-  console.log(`${serial_chosen} ${6-q_chosen-2} ${rgb.r} ${rgb.g} ${rgb.b}`);
+  // console.log(`${serial_chosen} ${6-q_chosen-2} ${rgb.r} ${rgb.g} ${rgb.b}`);
   tableWebSocket.send(`${serial_chosen} ${6-q_chosen-2} ${rgb.r} ${rgb.g} ${rgb.b}`);
   document.getElementById('touchscreen2').style.visibility = "visible";
   document.getElementById('touchscreen2').style.zIndex = "4";
@@ -170,8 +184,15 @@ function show_isotope(q, serial) {
   document.getElementById('touchscreen1').style.pointerEvents = "none";
   document.getElementById('continue-new-particle').style.pointerEvents = "none";
 
-  document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.zIndex = "3";
-  document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.pointerEvents = "none";
+
+  if (q == -1) {
+    document.getElementById(`element-main-${serial}`).style.zIndex = "3";
+    document.getElementById(`element-main-${serial}`).style.pointerEvents = "none";
+  }
+  else {
+    document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.zIndex = "3";
+    document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.pointerEvents = "none";
+  }
   getText = false
   if(q != -1) tableWebSocket.send(`text ${serial} ${element_isotopes[serial][q]}`)
   else tableWebSocket.send(`text ${serial} 0`)
@@ -179,18 +200,33 @@ function show_isotope(q, serial) {
 
 
   blur_all_elements(serial, q)
-
+  console.log(element_position[serial])
   deltax = 165 - element_position[serial][0];
   deltay = 300 - element_position[serial][1];
-
-  anim_iso = anime({
-    targets: `#element-${serial}-${element_isotopes[serial][q]}`,
+  console.log(deltax)
+  console.log(deltay)
+  if (q == -1) {
+    target = `#element-main-${serial}`
+    anim_iso = anime({
+      targets: target,
+      translateX: deltax,
+      translateY: deltay,
+      scale: 5,
+      autoplay: false,
+      easing: 'easeInOutExpo',
+    })
+  }
+  else {
+    target = `#element-${serial}-${element_isotopes[serial][q]}`
+    anim_iso = anime({
+    targets: target,
     scale: 5,
-    translateX: `${deltax}px`,
-    translateY: `${deltay}px`,
+    translateX: deltax,
+    translateY: deltay,
     autoplay: false,
     easing: 'easeInOutExpo',
-  })
+    })
+  }
   anim_iso.play()
   text.direction = "normal"
   text.finished.then(function () {
@@ -202,9 +238,12 @@ function show_isotope(q, serial) {
 
 }
 function continue_iso() {
-  // var rgb = hexToRgb(send_element_colors[last_id]);
-  console.log(`${serial_chosen} ${6-q_chosen-2} 0 0 0`);
-  tableWebSocket.send(`${serial_chosen} ${6-q_chosen-2} 0 0 0`);
+  // console.log(`${serial_chosen} ${6-q_chosen-2} 0 0 0`);
+  if (q_chosen == -1) {
+    tableWebSocket.send(`${serial_chosen} ${6} 0 0 0`);
+  } 
+  else tableWebSocket.send(`${serial_chosen} ${6-q_chosen-2} 0 0 0`);
+
   document.getElementById('touchscreen2').style.pointerEvents = "none";
   document.getElementById('touchscreen1').style.pointerEvents = "none";
   document.getElementById('continue-new-particle').style.pointerEvents = "none";
@@ -215,12 +254,16 @@ function continue_iso() {
   text.finished.then(function () {
     document.getElementById('touchscreen1').style.pointerEvents = "auto";
     document.getElementById('touchscreen2').style.pointerEvents = "auto";
-    document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][q_chosen]}`).style.zIndex = "1";
-    document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][q_chosen]}`).style.pointerEvents = "auto";
+    if (q_chosen == -1) {
+      document.getElementById(`element-main-${serial_chosen}`).style.zIndex = "2";
+      document.getElementById(`element-main-${serial_chosen}`).style.pointerEvents = "auto";
+    } else {
+      document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][q_chosen]}`).style.zIndex = "1";
+      document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][q_chosen]}`).style.pointerEvents = "auto";
+    }
     
-    serial_chosen = -1;
+    // serial_chosen = -1;
     q_chosen = -1
-    
   });
   document.getElementById('touchscreen2').style.visibility = "hidden";
   document.getElementById('touchscreen2').style.zIndex = "0";
@@ -272,8 +315,8 @@ for (var i = 0; i < 9; ++i) {
         `
       }
     } 
-    if (serial < 114 || serial > 118) onclickf = `onclick=show_isotopes_around_element("${serial}")`;
-    else onclickf = '';
+    onclickf = `onclick=show_isotopes_around_element("${serial}")`;
+    
     document.getElementById(`element-${serial}`).innerHTML += `
       <div class="table-element-main" ${onclickf} style="border-color: ${color}; color: ${color}" id="element-main-${serial}">
         <div class='table-element-left-space'>
