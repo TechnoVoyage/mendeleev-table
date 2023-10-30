@@ -6,8 +6,11 @@
 body{
     background-color: #000000;
     overflow: hidden;
+    user-select: none;
 }
-
+title {
+    user-select: none;
+}
 .main-header{
     font-size: 40pt;
     position: absolute;
