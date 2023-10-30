@@ -31,29 +31,30 @@ function makeSenders() {
   }
 }
 function blackScreen() {
-  var iso_index = 6;
   var color = [0, 0, 0]
   for (var el_index = 1; el_index <= 118; el_index++) {
-    console.log(el_index, iso_index, color)
-    // var sender=dmxnet.newSender({
-    //     ip: consts.ip_adresses[consts.element_adresses[el_index][0]], 
-    //     subnet: consts.element_adresses[el_index][1], 
-    //     universe: consts.element_adresses[el_index][2],
-    //     net: 0, 
-    //     port: 6454, 
-    //     base_refresh_interval: 1000 
-    //   });
-    if (iso_index < 5) {
-      var cnt = 0;
-      for (var i = iso_index * 28 * 3; i < ((iso_index + 1) * 28) * 3; i++) {
-        senders[el_index].prepChannel(i, color[cnt % 3]);
-        cnt++;
-      }
-    } else {
-      var cnt = 0;
-      for (var i = 5 * 28 * 3; i < (5 * 28 + 30) * 3; i++) {
-        senders[el_index].prepChannel(i, color[cnt % 3]);
-        cnt++;
+    for (var iso_index = 0; iso_index <= 4; iso_index++) {
+      console.log(el_index, iso_index, color)
+      // var sender=dmxnet.newSender({
+      //     ip: consts.ip_adresses[consts.element_adresses[el_index][0]], 
+      //     subnet: consts.element_adresses[el_index][1], 
+      //     universe: consts.element_adresses[el_index][2],
+      //     net: 0, 
+      //     port: 6454, 
+      //     base_refresh_interval: 1000 
+      //   });
+      if (iso_index < 5) {
+        var cnt = 0;
+        for (var i = iso_index * 28 * 3; i < ((iso_index + 1) * 28) * 3; i++) {
+          senders[el_index].prepChannel(i, color[cnt % 3]);
+          cnt++;
+        }
+      } else {
+        var cnt = 0;
+        for (var i = 5 * 28 * 3; i < (5 * 28 + 30) * 3; i++) {
+          senders[el_index].prepChannel(i, color[cnt % 3]);
+          cnt++;
+        }
       }
     }
     senders[el_index].transmit();
@@ -92,22 +93,26 @@ wss.on('connection', function connection(ws) {
     console.log(String(msg))
     const data = String(msg).split(" ");
     console.log(data)
-    if(data[0] != "text") {
+    if (data[0] != "text") {
       const elem = parseInt(data[0]);
-      var iso = parseInt(data[1])
-      const rgb = [parseInt(data[2]), parseInt(data[3]), parseInt(data[4])]
-      sendToElement(elem, iso, rgb);
+      if (elem != -1) {
+        var iso = parseInt(data[1])
+        const rgb = [parseInt(data[2]), parseInt(data[3]), parseInt(data[4])]
+        sendToElement(elem, iso, rgb);
+      } else {
+        blackScreen()
+      }
     } else {
-       var elem = data[1];
-       var iso = data[2]
-       fs.readFile(`${flash_path}/${elem}/${iso}.txt`, "utf8", (err,data) => {
-        if(!err) {
+      var elem = data[1];
+      var iso = data[2]
+      fs.readFile(`${flash_path}/${elem}/${iso}.txt`, "utf8", (err, data) => {
+        if (!err) {
           ws.send(data)
         } else {
           ws.send("none")
         }
-       });
-      
+      });
+
     }
   });
 

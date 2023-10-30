@@ -12,6 +12,7 @@ var tableWebSocket = new WebSocket("ws://127.0.0.1:8000")
 var iso_text = "test"
 var getText = false
 
+
 function hexToRgb(hex) {
   return {
     r: parseInt(hex.slice(1, 3), 16),
@@ -364,3 +365,13 @@ tableWebSocket.onopen = function(e) {
     console.log(`${i} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
   }
 }
+function clear() {
+  console.log("clearing")
+  tableWebSocket.send("-1")
+  location.reload()
+}
+let refreshTimeout = setInterval(() => clear(), 60000);
+document.getElementsByTagName("body")[0].addEventListener("click", function () {
+  clearInterval(refreshTimeout)
+  refreshTimeout = setInterval(() => clear(), 60000);
+})
