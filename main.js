@@ -162,7 +162,51 @@ animations = [
       tableWebSocket.send(`${ser} 6 0 0 0`);
     }
   }, 
+  async function (){
+    function dist(x1, y1, x2, y2){
+      return ((x2 - x1) ** 2 + (y1 - y2) ** 2) ** 0.5
+    }
+    function min(a, b){
+      return (a < b ? a : b)
+    }
+    function max(a, b){ return (a > b ? a : b)}
+    points = []
+    speed = []
+    size = 5
+    for (var i = 0; i < size; ++i){
+      points.push([Math.random() * 18, Math.random() * 9])
+      speed.push([-0.5 + Math.random(), -0.5 + Math.random()])
+    }
+    while (true){
+      for (var x = 0; x < 18; ++x){
+        for (var y = 0; y < 9; ++y){
+          ser = table_element_rel[y][x]
+          for (var j = 1; j <= 6; ++j) table_show(`${ser} ${j} 0 0 0`)
+          if (ser == 0) continue;
+          r = 0
+          for (var j = 0; j < size; ++j){
+            if (points[j][0] == x && points[j][1] == y) r += 1.0 / 0.01;
+            else r += 1.0 / dist(points[j][0], points[j][1], x, y) ** 2
+          }
+          c = min(r * 350, 255)
+          sss = 1 + Math.round(c / 255 * 5)
+          if (c < 50) c = 0;
+          table_show(`${ser} ${sss} ${min(c * 2, 255)} ${c} ${c}`)
+          //else table_show(`${ser} 6 0 0 0`)
+          
+        }
 
+      }
+      for (var j = 0; j < size; ++j){
+        points[j][0] += speed[j][0]
+        points[j][1] += speed[j][1]
+        if (points[j][0] >= 18 || points[j][0] <= 0) speed[j][0] *= -1;
+        if (points[j][1] >= 9 || points[j][1] <= 0) speed[j][1] *= -1;
+      }
+
+      await sleep(100)
+    }
+  }
 ]
 
 
@@ -479,4 +523,4 @@ tableWebSocket.onerror = function(err) {
   ws.close();
 };
 
-animations[0]()
+animations[3]()
