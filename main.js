@@ -181,17 +181,17 @@ animations = [
       for (var x = 0; x < 18; ++x){
         for (var y = 0; y < 9; ++y){
           ser = table_element_rel[y][x]
-          for (var j = 1; j <= 6; ++j) table_show(`${ser} ${j} 0 0 0`)
+          table_show(`${ser} 6 0 0 0`)
           if (ser == 0) continue;
           r = 0
           for (var j = 0; j < size; ++j){
             if (points[j][0] == x && points[j][1] == y) r += 1.0 / 0.01;
             else r += 1.0 / dist(points[j][0], points[j][1], x, y) ** 2
           }
-          c = min(r * 350, 255)
-          sss = 1 + Math.round(c / 255 * 5)
+          c = min(r * 250, 255)
+        
           if (c < 50) c = 0;
-          table_show(`${ser} ${sss} ${min(c * 2, 255)} ${c} ${c}`)
+          table_show(`${ser} 6 ${min(c * 2, 255)} ${c} ${c}`)
           //else table_show(`${ser} 6 0 0 0`)
           
         }
