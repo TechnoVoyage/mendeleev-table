@@ -66,8 +66,7 @@ function highlight_table(id) {
 function show_isotopes_around_element(id) {
   if(id > 113) return
   console.log(id_chosen + "ID_SCHONES")
-  var rgb = hexToRgb(send_element_colors_on[id]);
-  tableWebSocket.send(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
+  
  if(!clicked) {
   rgb = hexToRgb(send_element_colors_on[id]);
   console.log(rgb)
@@ -118,7 +117,8 @@ function show_isotopes_around_element(id) {
 
   dim_table(id);
   id_chosen = id;
-
+  var rgb = hexToRgb(send_element_colors_on[id]);
+  tableWebSocket.send(`${id} 6 ${rgb.r} ${rgb.g} ${rgb.b}`)
 
   anim = anime.timeline({
     duration: 300,
