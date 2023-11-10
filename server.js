@@ -105,7 +105,8 @@ wss.on('connection', function connection(ws) {
     } else {
       var elem = data[1];
       var iso = data[2]
-      fs.readFile(`${flash_path}/${elem}/${iso}.txt`, "utf8", (err, data) => {
+      var lang = data[3]
+      fs.readFile(`${flash_path}/${lang}/${elem}/${iso}.txt`, "utf8", (err, data) => {
         if (!err) {
           ws.send(data)
         } else {

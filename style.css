@@ -195,3 +195,31 @@ title {
     color: grey;
 
 }
+.language_button {
+    font-family: 'Tahoma';
+    font-size: 20pt;
+    background-color: #000000;
+    border-style: solid;
+    border-color: #CD8223;
+    color: #CD8223;
+    border-radius: 5px;
+    z-index: -1;
+}
+.language_button:disabled {
+    border-color: #78726b;
+    color: #78726b;
+}
+#btn-eng {
+    width: 90px;
+    height: 70px;
+    position: absolute;
+    bottom: 30px;
+    left: 30px
+}
+#btn-rus {
+    width: 90px;
+    height: 70px;
+    position: absolute;
+    bottom: 30px;
+    left: 130px;
+}

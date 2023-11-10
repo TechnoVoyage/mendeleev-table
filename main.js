@@ -11,8 +11,24 @@ var clicked = false
 var tableWebSocket = new WebSocket("ws://127.0.0.1:8000")
 var iso_text = "test"
 var getText = false
+const urlParams = new URLSearchParams(window.location.search);
+const myParam = urlParams.get('lang');
+var language;
+if(!myParam) language = "ru";
+else language = myParam;
 
+if (language == "ru") {
+  document.getElementById("continue-new-particle").textContent="Продолжить"
+  document.getElementById("main-header").textContent="Таблица Менделеева"
+  document.getElementById("btn-rus").disabled = true
+  
+} else {
+  document.getElementById("continue-new-particle").textContent="Continue"
+  document.getElementById("main-header").textContent="Mendeleev Table"
+  document.getElementById("btn-eng").disabled = true
+}
 
+console.log(language)
 function hexToRgb(hex) {
   return {
     r: parseInt(hex.slice(1, 3), 16),
@@ -33,6 +49,8 @@ document.getElementById('touchscreen2').onclick = function () {
 function dim_table(id) {
   document.getElementById('touchscreen1').style.visibility = "visible";
   document.getElementById('main-header').style.opacity = "0.2";
+  document.getElementById('btn-eng').style.opacity = "0.2";
+  document.getElementById('btn-rus').style.opacity = "0.2";
   for (var i = 1; i <= 118; ++i) {
     if (i != id) {
       element = document.getElementById(`element-${i}`)
@@ -54,6 +72,8 @@ function dim_table(id) {
 function highlight_table(id) {
   document.getElementById('touchscreen1').style.visibility = "hidden";
   document.getElementById('main-header').style.opacity = "1";
+  document.getElementById('btn-eng').style.opacity = "1";
+  document.getElementById('btn-rus').style.opacity = "1";
   for (var i = 1; i <= 118; ++i) {
     if (i != id) {
       element = document.getElementById(`element-${i}`)
@@ -148,6 +168,8 @@ function blur_all_elements(serial, q) {
     }
     else document.getElementById(`element-${id}`).style.filter = "blur(5px)";
   }
+  document.getElementById('btn-eng').style.filter = "blur(5px)";
+  document.getElementById('btn-rus').style.filter = "blur(5px)";
 }
 function unblur_all_elements() {
   document.getElementById('main-header').style.filter = "none"
@@ -158,6 +180,8 @@ function unblur_all_elements() {
       document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][i]}`).style.filter = "none";
     }
   }
+  document.getElementById('btn-eng').style.filter = "none";
+  document.getElementById('btn-rus').style.filter = "none";
 }
 
 text = anime({
@@ -197,8 +221,8 @@ function show_isotope(q, serial) {
     document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.pointerEvents = "none";
   }
   getText = false
-  if(q != -1) tableWebSocket.send(`text ${serial} ${element_isotopes[serial][q]}`)
-  else tableWebSocket.send(`text ${serial} 0`)
+  if(q != -1) tableWebSocket.send(`text ${serial} ${element_isotopes[serial][q]} ${language}`)
+  else tableWebSocket.send(`text ${serial} 0 ${language}`)
   setInterval(() => {document.getElementById('text').textContent = iso_text}, 100)
 
 
@@ -304,26 +328,42 @@ for (var i = 0; i < 9; ++i) {
 
     if (serial < 114 || serial > 118){
       for (var q = 0; q < element_isotopes[serial].length; ++q) {
-        document.getElementById(`element-${serial}`).innerHTML += `
-        <div class="table-element-isotope" onclick=show_isotope(${q},"${serial}") id="element-${serial}-${element_isotopes[serial][q]}" style="color: ${color}; border-color: ${color}">
-          <div class='table-element-left-space'>
-            <p class='table-element-serial'>${serial}</p>
-            <p class='table-element-name'>${element_names[serial][0]}</p>
-            <p class='table-element-name-full'>${element_names[serial][1]}</p>
+        if (language == "ru") {
+          document.getElementById(`element-${serial}`).innerHTML += `
+          <div class="table-element-isotope" onclick=show_isotope(${q},"${serial}") id="element-${serial}-${element_isotopes[serial][q]}" style="color: ${color}; border-color: ${color}">
+            <div class='table-element-left-space'>
+              <p class='table-element-serial'>${serial}</p>
+              <p class='table-element-name'>${element_names[serial][0]}</p>
+              <p class='table-element-name-full'>${element_names[serial][1]}</p>
+            </div>
+            <div class='table-element-dividing-line' style="background-color: ${color}"></div>
+            <div class='table-element-right-space'>
+              <p class='table-element-isotope-num'>${element_isotopes[serial][q]}</p>
+            </div>
           </div>
-          <div class='table-element-dividing-line' style="background-color: ${color}"></div>
-          <div class='table-element-right-space'>
-            <p class='table-element-isotope-num'>${element_isotopes[serial][q]}</p>
+          `
+        } else {
+          document.getElementById(`element-${serial}`).innerHTML += `
+          <div class="table-element-isotope" onclick=show_isotope(${q},"${serial}") id="element-${serial}-${element_isotopes[serial][q]}" style="color: ${color}; border-color: ${color}">
+            <div class='table-element-left-space'>
+              <p class='table-element-serial'>${serial}</p>
+              <p class='table-element-name'>${element_names[serial][0]}</p>
+              <p class='table-element-name-full'>${element_names[serial][2]}</p>
+            </div>
+            <div class='table-element-dividing-line' style="background-color: ${color}"></div>
+            <div class='table-element-right-space'>
+              <p class='table-element-isotope-num'>${element_isotopes[serial][q]}</p>
+            </div>
           </div>
-        </div>
-        `
+          `
+        }
       }
 
     } 
 
     onclickf = `onclick=show_isotopes_around_element("${serial}")`;
-    
-    document.getElementById(`element-${serial}`).innerHTML += `
+    if (language == "ru") {
+      document.getElementById(`element-${serial}`).innerHTML += `
       <div class="table-element-main" ${onclickf} style="border-color: ${color}; color: ${color}" id="element-main-${serial}">
         <div class='table-element-left-space'>
           <p class='table-element-serial'>${serial}</p>
@@ -336,6 +376,23 @@ for (var i = 0; i < 9; ++i) {
         </div>
       </div>
     `
+    }
+    else {
+      document.getElementById(`element-${serial}`).innerHTML += `
+      <div class="table-element-main" ${onclickf} style="border-color: ${color}; color: ${color}" id="element-main-${serial}">
+        <div class='table-element-left-space'>
+          <p class='table-element-serial'>${serial}</p>
+          <p class='table-element-name'>${element_names[serial][0]}</p>
+          <p class='table-element-name-full'>${element_names[serial][2]}</p>
+        </div>
+        <div class='table-element-dividing-line' style="background-color: ${color}"></div>
+        <div class='table-element-right-space' id='element-${serial}-isotopes-space'>
+
+        </div>
+      </div>
+    `
+    }
+    
     for (var q = 0; q < element_isotopes[serial].length; ++q) {
       document.getElementById(`element-${serial}-isotopes-space`).innerHTML +=
         `<p class='table-element-isotope-num'>${element_isotopes[serial][q]}</p>`
@@ -369,10 +426,21 @@ tableWebSocket.onopen = function(e) {
 function clear() {
   console.log("clearing")
   tableWebSocket.send("-1")
-  location.reload()
+  window.location.href = window.location.pathname+`?lang=${language}`
 }
 let refreshTimeout = setInterval(() => clear(), 60000);
 document.getElementsByTagName("body")[0].addEventListener("click", function () {
   clearInterval(refreshTimeout)
   refreshTimeout = setInterval(() => clear(), 60000);
 })
+
+function change_language(num) {
+  if(num == 1) {
+    language = "en"
+  }
+  if(num ==2) {
+    language = "ru"
+  }
+
+  clear()
+}
