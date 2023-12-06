@@ -191,10 +191,17 @@ function show_isotope(q, serial) {
   if (q == -1) {
     document.getElementById(`element-main-${serial}`).style.zIndex = "3";
     document.getElementById(`element-main-${serial}`).style.pointerEvents = "none";
+    for (var i = 0; i < element_isotopes[serial].length; ++i){
+      document.getElementById(`element-${serial}-${element_isotopes[serial][i]}`).style.pointerEvents = "none";
+    }
   }
   else {
+    for (var i = 0; i < element_isotopes[serial].length; ++i){
+      document.getElementById(`element-${serial}-${element_isotopes[serial][i]}`).style.pointerEvents = "none";
+    }
+    document.getElementById(`element-main-${serial}`).style.pointerEvents = "none";
     document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.zIndex = "3";
-    document.getElementById(`element-${serial}-${element_isotopes[serial][q]}`).style.pointerEvents = "none";
+    
   }
   getText = false
   if(q != -1) tableWebSocket.send(`text ${serial} ${element_isotopes[serial][q]}`)
@@ -261,9 +268,16 @@ function continue_iso() {
     if (q_chosen == -1) {
       document.getElementById(`element-main-${serial_chosen}`).style.zIndex = "2";
       document.getElementById(`element-main-${serial_chosen}`).style.pointerEvents = "auto";
+      for (var i = 0; i < element_isotopes[serial_chosen].length; ++i){
+        document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][i]}`).style.pointerEvents = "auto";
+      }
     } else {
       document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][q_chosen]}`).style.zIndex = "1";
       document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][q_chosen]}`).style.pointerEvents = "auto";
+      for (var i = 0; i < element_isotopes[serial_chosen].length; ++i){
+        document.getElementById(`element-${serial_chosen}-${element_isotopes[serial_chosen][i]}`).style.pointerEvents = "auto";
+      }
+      document.getElementById(`element-main-${serial_chosen}`).style.pointerEvents = "auto";
     }
     
     // serial_chosen = -1;
